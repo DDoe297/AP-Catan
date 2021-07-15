@@ -1,0 +1,31 @@
+#ifndef TILE_HPP
+#define TILE_HPP
+
+#include <QObject>
+#include <QVector>
+#include <QPair>
+#include "Tile_FWD.hpp"
+#include "Point_FWD.hpp"
+#include "Enums.hpp"
+
+class Tile : public QObject
+{
+    Q_OBJECT
+public:
+    explicit Tile(TileType type, int number, QPair<int,int> coordiantes, QVector<Point *> points, QObject *parent = nullptr);
+    //To Map
+    //To String
+    int getNumber() const;
+    TileType getType() const;
+    void setNumber(int newNumber);
+    const QVector<Point *> &getPoints() const;
+    void appendToPoints(Point *point);
+
+private:
+    TileType type;
+    int number;
+    QPair<int,int> coordiantes;
+    QVector<Point *> points;
+};
+
+#endif // TILE_HPP
