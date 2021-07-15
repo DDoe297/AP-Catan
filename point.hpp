@@ -2,29 +2,31 @@
 #define POINT_HPP
 
 #include <QObject>
-#include <QVector>
 #include <QPair>
+#include <QVector>
+
+#include "Board_FWD.hpp"
 #include "Point_FWD.hpp"
 #include "Tile_FWD.hpp"
+#include "board.hpp"
 #include "piece.hpp"
 
-class Point : public QObject
-{
-    Q_OBJECT
-public:
-    explicit Point(QVector<Tile *> Tiles, QPair<int,int> Coordiantes, QObject *parent = nullptr);
-    //To Map
-    //To String
-    Piece *getPiece() const;
-    const QVector<Point *> &getNeighbouringPoints() const;
-    const QVector<Tile *> &getTiles() const;
-    void setPiece(Piece *newPiece);
+class Point : public QObject {
+  Q_OBJECT
+ public:
+  explicit Point(QVector<Tile *> Tiles, QPair<int, int> Coordiantes,
+                 QObject *parent = nullptr);
+  // To Map
+  // To String
+  Piece *getPiece() const;
+  QVector<Point *> getNeighbouringPoints(Board *board);
+  QVector<Tile *> getTiles(Board *board);
+  void setPiece(Piece *newPiece);
 
-private:
-    QVector<Tile *> tiles;
-    Piece *piece;
-    QPair<int,int> coordiantes;
-    QVector<Point *> neighbouringPoints;
+ private:
+  QVector<Tile *> tiles;
+  Piece *piece;
+  QPair<int, int> coordiantes;
 };
 
-#endif // POINT_HPP
+#endif  // POINT_HPP
