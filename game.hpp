@@ -21,7 +21,7 @@ class Game : public QObject {
   void checkLongestRoad(void);
   StatusCode addRoad(Player *player, Point *startPoint, Point *endPoint,
                      bool gameStart = false);
-  StatusCode addSettelment(Player *player, Point *point,
+  StatusCode addSettlement(Player *player, Point *point,
                            bool gameStart = false);
   StatusCode upgradeSettelment(Player *player, Point *point);
   bool checkForWinner(void);
@@ -38,7 +38,10 @@ class Game : public QObject {
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
-
+  void playMonoploly(Player *player,ResourceCard card);
+  void playeYearOfPlenty(Player *player,ResourceCard cardOne,ResourceCard cardTwo);
+  void playKnight(Player *player, Tile *tile, Player *victim);
+  void playRoadBuilding(Player *player,QPair<Point *,Point *> firstRoad,QPair<Point *,Point *> secondRoad);
  private:
   Board *board;
   Player *largestArmyOwner;

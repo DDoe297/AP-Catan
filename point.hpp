@@ -14,8 +14,7 @@
 class Point : public QObject {
   Q_OBJECT
  public:
-  explicit Point(QVector<Tile *> Tiles, QPair<int, int> Coordiantes,
-                 QObject *parent = nullptr);
+  explicit Point(QPair<int, int> Coordiantes,QObject *parent = nullptr);
   // To Map
   // To String
   Piece *getPiece() const;
@@ -24,7 +23,6 @@ class Point : public QObject {
   void setPiece(Piece *newPiece);
 
  private:
-  QVector<Tile *> tiles;
   Piece *piece;
   QPair<int, int> coordiantes;
 };

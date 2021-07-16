@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QVector>
 
-enum class PieceType { Settelment = 0, Road = 1, City = 2 };
+enum class PieceType { Settlement = 0, Road = 1, City = 2 };
 
 enum class TileType {
   Forest = 0,

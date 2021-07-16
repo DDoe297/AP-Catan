@@ -12,6 +12,9 @@ Game::Game(int numberOfPlayers, int VictoryPointsToWin, QObject *parent)
   developmentCards = QVector<DevelopmentCard>(devCards);
   shuffle(developmentCards);
   hasEnded = false;
+  longestRoadOwner=nullptr;
+  largestArmyOwner=nullptr;
+  winner=nullptr;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -29,7 +32,7 @@ StatusCode Game::addRoad(Player *player, Point *startPoint, Point *endPoint,
   return code;
 }
 
-StatusCode Game::addSettelment(Player *player, Point *point, bool gameStart) {
+StatusCode Game::addSettlement(Player *player, Point *point, bool gameStart) {
   StatusCode code = player->buildSettelment(point, gameStart);
   if (code == StatusCode::OK) {
     checkForWinner();
@@ -162,4 +165,63 @@ void Game::checkForLargestArmy() {
   if (tempLargestArmyOwner != largestArmyOwner) {
     largestArmyOwner = tempLargestArmyOwner;
   }
+}
+
+void Game::playMonoploly(Player *player, ResourceCard card)
+{
+    if(!player->hasDevelopmentCard(DevelopmentCard::Monopoly)){
+        return;
+    }
+    for(auto p:players){
+        if(p==player){
+            continue;
+        }
+        int numberOfCards=p->howManyOfResource(card);
+        if(numberOfCards>0){
+          QVector<ResourceCard> getCards;
+          for(int i=0;i<numberOfCards;i++){
+            getCards.append(card);
+          }
+          p->removeCards(getCards);
+          player->addCards(getCards);
+        }
+    }
+    player->removeDevelopmentCard(DevelopmentCard::Monopoly);
+}
+
+void Game::playeYearOfPlenty(Player *player, ResourceCard cardOne, ResourceCard cardTwo)
+{
+    if(!player->hasDevelopmentCard(DevelopmentCard::YearOfPlenty)){
+        return;
+    }
+    player->addCards({cardOne,cardTwo});
+    player->removeDevelopmentCard(DevelopmentCard::YearOfPlenty);
+}
+
+void Game::playKnight(Player *player, Tile *tile, Player *victim)
+{
+    if(!player->hasDevelopmentCard(DevelopmentCard::Knight)){
+        return;
+    }
+    activateRobber(tile,player,victim);
+    player->increaseKnights();
+    player->removeDevelopmentCard(DevelopmentCard::Knight);
+}
+
+void Game::playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad, QPair<Point *, Point *> secondRoad)
+{
+    if(!player->hasDevelopmentCard(DevelopmentCard::RoadBuilding)){
+        return;
+    }
+    if(player->checkRoadLocation(firstRoad.first,firstRoad.second)==StatusCode::OK&&
+       player->checkRoadLocation(secondRoad.first,secondRoad.second)==StatusCode::OK){
+        player->addCards(roadPrice);
+        player->buildRoad(firstRoad.first,firstRoad.second);
+        player->addCards(roadPrice);
+        player->buildRoad(secondRoad.first,secondRoad.second);
+    }
+    else{
+        return;
+    }
+    player->removeDevelopmentCard(DevelopmentCard::RoadBuilding);
 }

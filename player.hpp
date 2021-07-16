@@ -14,7 +14,7 @@
 #include "game.hpp"
 #include "harbor.hpp"
 #include "road.hpp"
-#include "settelment.hpp"
+#include "settlement.hpp"
 
 class Player : public QObject {
   Q_OBJECT
@@ -32,6 +32,7 @@ class Player : public QObject {
   StatusCode upgradeSettelmentToCity(Point *point);
   bool hasCards(QVector<ResourceCard> cardsList);
   bool hasAnyCard(void);
+  int howManyOfResource(ResourceCard card);
   StatusCode removeCards(QVector<ResourceCard> cardsList);
   ResourceCard removeRandomCardAndReturnIt(void);
   StatusCode addCards(QVector<ResourceCard> cardsList);
@@ -51,7 +52,10 @@ class Player : public QObject {
   const QVector<ResourceCard> &getCards() const;
   int getKnights() const;
   int getLongestRoadLength() const;
-
+  QVector<Piece *> getNonRoadPieces(void);
+  QVector<QPair<Point *,Point *>> getAvailableRoadCoordinates(void);
+  QVector<Point *> getAvailableSettlementCoordinates(void);
+  void increaseKnights(void);
  private:
   QString name;
   Game *game;

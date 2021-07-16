@@ -18,7 +18,7 @@ SOURCES += \
         player.cpp \
         point.cpp \
         road.cpp \
-        settelment.cpp \
+        settlement.cpp \
         tile.cpp \
         trade.cpp \
         tradeanswer.cpp
@@ -48,7 +48,7 @@ HEADERS += \
     player.hpp \
     point.hpp \
     road.hpp \
-    settelment.hpp \
+    settlement.hpp \
     tile.hpp \
     trade.hpp \
     tradeanswer.hpp

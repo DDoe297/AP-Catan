@@ -18,3 +18,8 @@ void Tile::setNumber(int newNumber) { number = newNumber; }
 const QVector<Point *> &Tile::getPoints() const { return points; }
 
 void Tile::appendToPoints(Point *point) { points.append(point); }
+
+const QPair<int, int> &Tile::getCoordiantes() const
+{
+    return coordiantes;
+}

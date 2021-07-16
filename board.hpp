@@ -19,7 +19,7 @@
 #include "harbor.hpp"
 #include "player.hpp"
 #include "road.hpp"
-#include "settelment.hpp"
+#include "settlement.hpp"
 #include "tile.hpp"
 
 class Board : public QObject {

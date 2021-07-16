@@ -21,8 +21,9 @@ class Tile : public QObject {
   void setNumber(int newNumber);
   const QVector<Point *> &getPoints() const;
   void appendToPoints(Point *point);
+  const QPair<int, int> &getCoordiantes() const;
 
- private:
+private:
   TileType type;
   int number;
   QPair<int, int> coordiantes;

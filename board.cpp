@@ -25,7 +25,7 @@ Board::Board(Game *Game,QObject *parent) : QObject(parent)
     for(int i=0;i<6;i++){
         QVector<Point *> tempPoints;
         for(int j=0;j<pointSizeRefrence[i];j++){
-            Point *newPoint=new Point({},{i,j});
+            Point *newPoint=new Point({i,j});
             for(auto tile:newPoint->getTiles(this)){
                 tile->appendToPoints(newPoint);
             }
@@ -140,15 +140,15 @@ StatusCode Board::addResource(int roll)
         for(auto point:row){
             if(point->getPiece()!=nullptr){
                 QVector<Tile *> tiles=point->getTiles(this);
-                Settelment *settelment=dynamic_cast<Settelment *>(point->getPiece());
-                if(settelment!=nullptr){
+                Settlement *settlement=dynamic_cast<Settlement *>(point->getPiece());
+                if(settlement!=nullptr){
                     for(auto tile:tiles){
                         if(robber==tile){
                             continue;
                         }
                         if(tile->getNumber()==roll){
                             ResourceCard type=TileTypeToResource[tile->getType()];
-                            settelment->getOwner()->addCards({type});
+                            settlement->getOwner()->addCards({type});
                         }
                     }
                 } else{
@@ -181,9 +181,9 @@ const QVector<Harbor *> &Board::getHarbors() const
 
 StatusCode Board::addInitialResources(Piece *piece)
 {
-    Settelment *settelment=dynamic_cast<Settelment *>(piece);
-    if(settelment!=nullptr){
-        for(auto tile:settelment->getPoint()->getTiles(this)){
+    Settlement *settlement=dynamic_cast<Settlement *>(piece);
+    if(settlement!=nullptr){
+        for(auto tile:settlement->getPoint()->getTiles(this)){
             piece->getOwner()->addCards({TileTypeToResource[tile->getType()]});
         }
        return StatusCode::OK;
