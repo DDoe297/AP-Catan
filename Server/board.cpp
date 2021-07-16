@@ -141,6 +141,7 @@ StatusCode Board::addResource(int roll)
             if(point->getPiece()!=nullptr){
                 QVector<Tile *> tiles=point->getTiles(this);
                 Settlement *settlement=dynamic_cast<Settlement *>(point->getPiece());
+                City *city=dynamic_cast<City *>(point->getPiece());
                 if(settlement!=nullptr){
                     for(auto tile:tiles){
                         if(robber==tile){
@@ -151,8 +152,8 @@ StatusCode Board::addResource(int roll)
                             settlement->getOwner()->addCards({type});
                         }
                     }
-                } else{
-                    City *city=dynamic_cast<City *>(point->getPiece());
+                }
+                else if(city!=nullptr){
                     for(auto tile:tiles){
                         if(robber==tile){
                             continue;
@@ -182,15 +183,20 @@ const QVector<Harbor *> &Board::getHarbors() const
 StatusCode Board::addInitialResources(Piece *piece)
 {
     Settlement *settlement=dynamic_cast<Settlement *>(piece);
+    City *city=dynamic_cast<City *>(piece);
     if(settlement!=nullptr){
         for(auto tile:settlement->getPoint()->getTiles(this)){
             piece->getOwner()->addCards({TileTypeToResource[tile->getType()]});
         }
        return StatusCode::OK;
     }
-    City *city=dynamic_cast<City *>(piece);
-    for(auto tile:city->getPoint()->getTiles(this)){
-        piece->getOwner()->addCards({TileTypeToResource[tile->getType()]});
+    else if(city!=nullptr){
+        for(auto tile:city->getPoint()->getTiles(this)){
+            piece->getOwner()->addCards({TileTypeToResource[tile->getType()]});
+        }
+    }
+    else{
+        return StatusCode::PieceDosentExist;
     }
     return StatusCode::OK;
 }
@@ -347,4 +353,9 @@ Point *Board::getPoint(int i, int j)
         return points[i][j];
     }
     return nullptr;
+}
+
+Tile *Board::getRobber() const
+{
+    return robber;
 }

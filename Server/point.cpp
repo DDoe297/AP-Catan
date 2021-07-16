@@ -1,9 +1,8 @@
 #include "point.hpp"
 
-Point::Point(QPair<int, int> Coordiantes,QObject *parent)
-    : QObject(parent) {
+Point::Point(QPair<int, int> Coordiantes, QObject *parent) : QObject(parent) {
   coordiantes = Coordiantes;
-  piece=nullptr;
+  piece = nullptr;
 }
 
 Piece *Point::getPiece() const { return piece; }
@@ -96,3 +95,5 @@ QVector<Tile *> Point::getTiles(Board *board) {
 }
 
 void Point::setPiece(Piece *newPiece) { piece = newPiece; }
+
+const QPair<int, int> &Point::getCoordiantes() const { return coordiantes; }

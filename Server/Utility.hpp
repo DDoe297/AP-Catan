@@ -2,6 +2,7 @@
 #define UTILITY_HPP
 #include <QVector>
 #include <algorithm>
+#include <chrono>
 #include <ctime>
 #include <random>
 
@@ -13,9 +14,9 @@ void append(QVector<T>& a, const QVector<T>& b) {
 }
 template <typename T>
 void shuffle(QVector<T>& a) {
-  auto rd = std::random_device{};
-  auto rng = std::default_random_engine{rd()};
-  std::shuffle(a.begin(), a.end(), rng);
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine e(seed);
+  std::shuffle(a.begin(), a.end(), e);
 }
 
 int randomNumber(int start, int end);

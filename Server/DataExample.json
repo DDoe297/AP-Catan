@@ -1,0 +1,733 @@
+{
+    "board": {
+        "harbors": [
+            {
+                "points": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        1,
+                        0
+                    ]
+                ],
+                "type": 5
+            },
+            {
+                "points": [
+                    [
+                        2,
+                        0
+                    ],
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "type": 2
+            },
+            {
+                "points": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        5,
+                        0
+                    ]
+                ],
+                "type": 5
+            },
+            {
+                "points": [
+                    [
+                        5,
+                        2
+                    ],
+                    [
+                        5,
+                        3
+                    ]
+                ],
+                "type": 3
+            },
+            {
+                "points": [
+                    [
+                        5,
+                        5
+                    ],
+                    [
+                        5,
+                        6
+                    ]
+                ],
+                "type": 1
+            },
+            {
+                "points": [
+                    [
+                        3,
+                        9
+                    ],
+                    [
+                        3,
+                        10
+                    ]
+                ],
+                "type": 0
+            },
+            {
+                "points": [
+                    [
+                        2,
+                        9
+                    ],
+                    [
+                        1,
+                        8
+                    ]
+                ],
+                "type": 5
+            },
+            {
+                "points": [
+                    [
+                        0,
+                        6
+                    ],
+                    [
+                        0,
+                        5
+                    ]
+                ],
+                "type": 4
+            },
+            {
+                "points": [
+                    [
+                        0,
+                        2
+                    ],
+                    [
+                        0,
+                        1
+                    ]
+                ],
+                "type": 5
+            }
+        ],
+        "points": [
+            {
+                "coordinates": [
+                    0,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    1
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    2
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    4
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    0,
+                    6
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    1
+                ],
+                "piece": {
+                    "owner": 2,
+                    "type": 0
+                }
+            },
+            {
+                "coordinates": [
+                    1,
+                    2
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    4
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    6
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    7
+                ]
+            },
+            {
+                "coordinates": [
+                    1,
+                    8
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    1
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    2
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    4
+                ],
+                "piece": {
+                    "owner": 3,
+                    "type": 0
+                }
+            },
+            {
+                "coordinates": [
+                    2,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    6
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    7
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    8
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    9
+                ]
+            },
+            {
+                "coordinates": [
+                    2,
+                    10
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    1
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    2
+                ],
+                "piece": {
+                    "owner": 0,
+                    "type": 0
+                }
+            },
+            {
+                "coordinates": [
+                    3,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    4
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    6
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    7
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    8
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    9
+                ]
+            },
+            {
+                "coordinates": [
+                    3,
+                    10
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    1
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    2
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    4
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    6
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    7
+                ]
+            },
+            {
+                "coordinates": [
+                    4,
+                    8
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    0
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    1
+                ],
+                "piece": {
+                    "owner": 1,
+                    "type": 0
+                }
+            },
+            {
+                "coordinates": [
+                    5,
+                    2
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    3
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    4
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    5
+                ]
+            },
+            {
+                "coordinates": [
+                    5,
+                    6
+                ]
+            }
+        ],
+        "roads": [
+            {
+                "owner": 0,
+                "points": [
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ]
+            },
+            {
+                "owner": 1,
+                "points": [
+                    [
+                        5,
+                        1
+                    ],
+                    [
+                        5,
+                        2
+                    ]
+                ]
+            },
+            {
+                "owner": 2,
+                "points": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        1,
+                        0
+                    ]
+                ]
+            }
+        ],
+        "robber": [
+            4,
+            1
+        ],
+        "tiles": [
+            {
+                "coordinates": [
+                    0,
+                    0
+                ],
+                "number": 9,
+                "type": 3
+            },
+            {
+                "coordinates": [
+                    0,
+                    1
+                ],
+                "number": 9,
+                "type": 1
+            },
+            {
+                "coordinates": [
+                    0,
+                    2
+                ],
+                "number": 5,
+                "type": 0
+            },
+            {
+                "coordinates": [
+                    1,
+                    0
+                ],
+                "number": 8,
+                "type": 2
+            },
+            {
+                "coordinates": [
+                    1,
+                    1
+                ],
+                "number": 11,
+                "type": 0
+            },
+            {
+                "coordinates": [
+                    1,
+                    2
+                ],
+                "number": 6,
+                "type": 0
+            },
+            {
+                "coordinates": [
+                    1,
+                    3
+                ],
+                "number": 2,
+                "type": 4
+            },
+            {
+                "coordinates": [
+                    2,
+                    0
+                ],
+                "number": 3,
+                "type": 3
+            },
+            {
+                "coordinates": [
+                    2,
+                    1
+                ],
+                "number": 4,
+                "type": 4
+            },
+            {
+                "coordinates": [
+                    2,
+                    2
+                ],
+                "number": 6,
+                "type": 3
+            },
+            {
+                "coordinates": [
+                    2,
+                    3
+                ],
+                "number": 11,
+                "type": 0
+            },
+            {
+                "coordinates": [
+                    2,
+                    4
+                ],
+                "number": 3,
+                "type": 3
+            },
+            {
+                "coordinates": [
+                    3,
+                    0
+                ],
+                "number": 10,
+                "type": 2
+            },
+            {
+                "coordinates": [
+                    3,
+                    1
+                ],
+                "number": 10,
+                "type": 2
+            },
+            {
+                "coordinates": [
+                    3,
+                    2
+                ],
+                "number": 4,
+                "type": 4
+            },
+            {
+                "coordinates": [
+                    3,
+                    3
+                ],
+                "number": 5,
+                "type": 4
+            },
+            {
+                "coordinates": [
+                    4,
+                    0
+                ],
+                "number": 12,
+                "type": 1
+            },
+            {
+                "coordinates": [
+                    4,
+                    1
+                ],
+                "number": 0,
+                "type": 5
+            },
+            {
+                "coordinates": [
+                    4,
+                    2
+                ],
+                "number": 8,
+                "type": 1
+            }
+        ]
+    },
+    "devCardsRemaining": 25,
+    "hasEnded": false,
+    "players": [
+        {
+            "VPs": 1,
+            "cards": [
+                2,
+                4,
+                3
+            ],
+            "cities": 4,
+            "color": 1,
+            "devCards": [
+            ],
+            "knights": 0,
+            "name": "Danny",
+            "num": 0,
+            "roads": 14,
+            "settlements": 4
+        },
+        {
+            "VPs": 1,
+            "cards": [
+                1
+            ],
+            "cities": 4,
+            "color": 3,
+            "devCards": [
+            ],
+            "knights": 0,
+            "name": "Hadi",
+            "num": 1,
+            "roads": 14,
+            "settlements": 4
+        },
+        {
+            "VPs": 1,
+            "cards": [
+                2,
+                3
+            ],
+            "cities": 4,
+            "color": 0,
+            "devCards": [
+            ],
+            "knights": 0,
+            "name": "Fatemeh",
+            "num": 2,
+            "roads": 14,
+            "settlements": 4
+        },
+        {
+            "VPs": 1,
+            "cards": [
+                3,
+                4,
+                0
+            ],
+            "cities": 4,
+            "color": 2,
+            "devCards": [
+            ],
+            "knights": 0,
+            "name": "Asghar",
+            "num": 3,
+            "roads": 15,
+            "settlements": 4
+        }
+    ]
+}

@@ -15,8 +15,6 @@ class Harbor : public QObject {
   static ResourceCard harborToResourceCard(HarborType type);
   explicit Harbor(Point *StartPoint, Point *EndPoint, HarborType Type,
                   QObject *parent = nullptr);
-  // To Map
-  // To String
   QVector<Point *> getPoints(void);
   Point *getStartPoint() const;
   Point *getEndPoint() const;

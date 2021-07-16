@@ -7,8 +7,6 @@
 class Settlement : public Piece {
  public:
   explicit Settlement(Player *Owner, Point *point, QObject *parent = nullptr);
-  // To Map
-  // To String
   Point *getPoint() const;
 
  private:

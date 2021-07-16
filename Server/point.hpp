@@ -14,13 +14,12 @@
 class Point : public QObject {
   Q_OBJECT
  public:
-  explicit Point(QPair<int, int> Coordiantes,QObject *parent = nullptr);
-  // To Map
-  // To String
+  explicit Point(QPair<int, int> Coordiantes, QObject *parent = nullptr);
   Piece *getPiece() const;
   QVector<Point *> getNeighbouringPoints(Board *board);
   QVector<Tile *> getTiles(Board *board);
   void setPiece(Piece *newPiece);
+  const QPair<int, int> &getCoordiantes() const;
 
  private:
   Piece *piece;

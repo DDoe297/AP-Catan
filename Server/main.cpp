@@ -1,13 +1,37 @@
 #include <QCoreApplication>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include "game.hpp"
 
-int main(int argc, char *argv[]) {
-  QCoreApplication a(argc, argv);
-  Game game=Game();
-  game.addSettlement(game.getPlayer(0),game.getBoard()->getPoint(0, 0),true);
-  game.addRoad(game.getPlayer(0), game.getBoard()->getPoint(0, 0),game.getBoard()->getPoint(0, 1), true);
-  for(auto tile:game.getBoard()->getAllTiles()){
-   qDebug()<<tile->getCoordiantes()<<"\n";
+int main(void) {
+  QFile file("2.txt");
+  QVector<initialPlayerData> d;
+  d.append({"Danny", Color::Blue});
+  d.append({"Hadi", Color::Orange});
+  d.append({"Fatemeh", Color::Red});
+  d.append({"Asghar", Color::White});
+  if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    Game game = Game(d);
+    game.addSettlement(game.getPlayer(0), game.getBoard()->getPoint(3, 2),
+                       true);
+    game.addSettlement(game.getPlayer(1), game.getBoard()->getPoint(5, 1),
+                       true);
+    game.addSettlement(game.getPlayer(2), game.getBoard()->getPoint(1, 1),
+                       true);
+    game.addSettlement(game.getPlayer(3), game.getBoard()->getPoint(2, 4),
+                       true);
+    game.addRoad(game.getPlayer(0), game.getBoard()->getPoint(3, 2),
+                 game.getBoard()->getPoint(3, 1), true);
+    game.addRoad(game.getPlayer(1), game.getBoard()->getPoint(5, 1),
+                 game.getBoard()->getPoint(5, 2), true);
+    game.addRoad(game.getPlayer(2), game.getBoard()->getPoint(1, 1),
+                 game.getBoard()->getPoint(1, 0), true);
+    game.addRoad(game.getPlayer(2), game.getBoard()->getPoint(2, 5),
+                 game.getBoard()->getPoint(2, 4), true);
+    QJsonDocument save(game.toJSON());
+    file.write(save.toJson());
   }
-  qDebug()<<game.getPlayer(0)->getRoads()[0]->getStartPoint();
+  file.close();
 }

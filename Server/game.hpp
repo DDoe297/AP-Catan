@@ -1,6 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QObject>
 
 #include "Board_FWD.hpp"
@@ -10,11 +12,16 @@
 #include "board.hpp"
 #include "tile.hpp"
 
+struct initialPlayerData {
+  QString name;
+  Color color;
+};
+
 class Game : public QObject {
   Q_OBJECT
  public:
-  explicit Game(int numberOfPlayers = 4, int VictoryPointsToWin = 10,
-                QObject *parent = nullptr);
+  explicit Game(QVector<initialPlayerData> data, int numberOfPlayers = 4,
+                int VictoryPointsToWin = 10, QObject *parent = nullptr);
   Board *getBoard() const;
   Player *getLargestArmyOwner() const;
   Player *getLongestRoadOwner() const;
@@ -38,10 +45,14 @@ class Game : public QObject {
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
-  void playMonoploly(Player *player,ResourceCard card);
-  void playeYearOfPlenty(Player *player,ResourceCard cardOne,ResourceCard cardTwo);
+  void playMonoploly(Player *player, ResourceCard card);
+  void playeYearOfPlenty(Player *player, ResourceCard cardOne,
+                         ResourceCard cardTwo);
   void playKnight(Player *player, Tile *tile, Player *victim);
-  void playRoadBuilding(Player *player,QPair<Point *,Point *> firstRoad,QPair<Point *,Point *> secondRoad);
+  void playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad,
+                        QPair<Point *, Point *> secondRoad);
+  QJsonObject toJSON(void);
+
  private:
   Board *board;
   Player *largestArmyOwner;

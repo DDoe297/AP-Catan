@@ -14,8 +14,6 @@ class Tile : public QObject {
  public:
   explicit Tile(TileType type, int number, QPair<int, int> coordiantes,
                 QVector<Point *> points, QObject *parent = nullptr);
-  // To Map
-  // To String
   int getNumber() const;
   TileType getType() const;
   void setNumber(int newNumber);
@@ -23,7 +21,7 @@ class Tile : public QObject {
   void appendToPoints(Point *point);
   const QPair<int, int> &getCoordiantes() const;
 
-private:
+ private:
   TileType type;
   int number;
   QPair<int, int> coordiantes;

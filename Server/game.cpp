@@ -1,10 +1,11 @@
 #include "game.hpp"
 
-Game::Game(int numberOfPlayers, int VictoryPointsToWin, QObject *parent)
+Game::Game(QVector<initialPlayerData> data, int numberOfPlayers,
+           int VictoryPointsToWin, QObject *parent)
     : QObject(parent) {
   board = new Board(this);
   for (int i = 0; i < numberOfPlayers; i++) {
-    Player *newPlayer = new Player(QString::number(i), this, i, (Color)i);
+    Player *newPlayer = new Player(data[i].name, this, i, data[i].color);
     // Get input for name and color
     players.append(newPlayer);
   }
@@ -12,9 +13,9 @@ Game::Game(int numberOfPlayers, int VictoryPointsToWin, QObject *parent)
   developmentCards = QVector<DevelopmentCard>(devCards);
   shuffle(developmentCards);
   hasEnded = false;
-  longestRoadOwner=nullptr;
-  largestArmyOwner=nullptr;
-  winner=nullptr;
+  longestRoadOwner = nullptr;
+  largestArmyOwner = nullptr;
+  winner = nullptr;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -167,61 +168,175 @@ void Game::checkForLargestArmy() {
   }
 }
 
-void Game::playMonoploly(Player *player, ResourceCard card)
-{
-    if(!player->hasDevelopmentCard(DevelopmentCard::Monopoly)){
-        return;
+void Game::playMonoploly(Player *player, ResourceCard card) {
+  if (!player->hasDevelopmentCard(DevelopmentCard::Monopoly)) {
+    return;
+  }
+  for (auto p : players) {
+    if (p == player) {
+      continue;
     }
-    for(auto p:players){
-        if(p==player){
-            continue;
-        }
-        int numberOfCards=p->howManyOfResource(card);
-        if(numberOfCards>0){
-          QVector<ResourceCard> getCards;
-          for(int i=0;i<numberOfCards;i++){
-            getCards.append(card);
-          }
-          p->removeCards(getCards);
-          player->addCards(getCards);
-        }
+    int numberOfCards = p->howManyOfResource(card);
+    if (numberOfCards > 0) {
+      QVector<ResourceCard> getCards;
+      for (int i = 0; i < numberOfCards; i++) {
+        getCards.append(card);
+      }
+      p->removeCards(getCards);
+      player->addCards(getCards);
     }
-    player->removeDevelopmentCard(DevelopmentCard::Monopoly);
+  }
+  player->removeDevelopmentCard(DevelopmentCard::Monopoly);
 }
 
-void Game::playeYearOfPlenty(Player *player, ResourceCard cardOne, ResourceCard cardTwo)
-{
-    if(!player->hasDevelopmentCard(DevelopmentCard::YearOfPlenty)){
-        return;
-    }
-    player->addCards({cardOne,cardTwo});
-    player->removeDevelopmentCard(DevelopmentCard::YearOfPlenty);
+void Game::playeYearOfPlenty(Player *player, ResourceCard cardOne,
+                             ResourceCard cardTwo) {
+  if (!player->hasDevelopmentCard(DevelopmentCard::YearOfPlenty)) {
+    return;
+  }
+  player->addCards({cardOne, cardTwo});
+  player->removeDevelopmentCard(DevelopmentCard::YearOfPlenty);
 }
 
-void Game::playKnight(Player *player, Tile *tile, Player *victim)
-{
-    if(!player->hasDevelopmentCard(DevelopmentCard::Knight)){
-        return;
-    }
-    activateRobber(tile,player,victim);
-    player->increaseKnights();
-    player->removeDevelopmentCard(DevelopmentCard::Knight);
+void Game::playKnight(Player *player, Tile *tile, Player *victim) {
+  if (!player->hasDevelopmentCard(DevelopmentCard::Knight)) {
+    return;
+  }
+  activateRobber(tile, player, victim);
+  player->increaseKnights();
+  player->removeDevelopmentCard(DevelopmentCard::Knight);
 }
 
-void Game::playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad, QPair<Point *, Point *> secondRoad)
-{
-    if(!player->hasDevelopmentCard(DevelopmentCard::RoadBuilding)){
-        return;
+void Game::playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad,
+                            QPair<Point *, Point *> secondRoad) {
+  if (!player->hasDevelopmentCard(DevelopmentCard::RoadBuilding)) {
+    return;
+  }
+  if (player->checkRoadLocation(firstRoad.first, firstRoad.second) ==
+          StatusCode::OK &&
+      player->checkRoadLocation(secondRoad.first, secondRoad.second) ==
+          StatusCode::OK) {
+    player->addCards(roadPrice);
+    player->buildRoad(firstRoad.first, firstRoad.second);
+    player->addCards(roadPrice);
+    player->buildRoad(secondRoad.first, secondRoad.second);
+  } else {
+    return;
+  }
+  player->removeDevelopmentCard(DevelopmentCard::RoadBuilding);
+}
+
+QJsonObject Game::toJSON() {
+  QJsonObject gameJson;
+  QJsonArray playersArray;
+  for (auto player : players) {
+    QJsonObject p;
+    p["name"] = player->getName();
+    p["num"] = player->getNum();
+    p["color"] = (int)player->getColor();
+    p["VPs"] = player->calculateVictoryPoints(true);
+    p["roads"] = player->getRoadsCount();
+    p["cities"] = player->getCities();
+    p["settlements"] = player->getSettelments();
+    p["knights"] = player->getKnights();
+    QJsonArray playerCards;
+    for (auto card : player->getCards()) {
+      playerCards.append((int)card);
     }
-    if(player->checkRoadLocation(firstRoad.first,firstRoad.second)==StatusCode::OK&&
-       player->checkRoadLocation(secondRoad.first,secondRoad.second)==StatusCode::OK){
-        player->addCards(roadPrice);
-        player->buildRoad(firstRoad.first,firstRoad.second);
-        player->addCards(roadPrice);
-        player->buildRoad(secondRoad.first,secondRoad.second);
+    p["cards"] = playerCards;
+    QJsonArray playerDevCards;
+    for (auto card : player->getDevCards()) {
+      playerDevCards.append((int)card);
     }
-    else{
-        return;
+    p["devCards"] = playerDevCards;
+    playersArray.append(p);
+  }
+  gameJson["players"] = playersArray;
+  QJsonObject boardJson;
+  QJsonArray robberCoordiantes;
+  robberCoordiantes.append(board->getRobber()->getCoordiantes().first);
+  robberCoordiantes.append(board->getRobber()->getCoordiantes().second);
+  boardJson["robber"] = robberCoordiantes;
+  QJsonArray tilesArray;
+  for (auto tile : board->getAllTiles()) {
+    QJsonObject t;
+    QJsonArray tileCoordiantes;
+    tileCoordiantes.append(tile->getCoordiantes().first);
+    tileCoordiantes.append(tile->getCoordiantes().second);
+    t["coordinates"] = tileCoordiantes;
+    t["number"] = tile->getNumber();
+    t["type"] = (int)tile->getType();
+    tilesArray.append(t);
+  }
+  boardJson["tiles"] = tilesArray;
+  QJsonArray pointsArray;
+  for (auto point : board->getAllPoints()) {
+    QJsonObject p;
+    QJsonArray pointCoordiantes;
+    pointCoordiantes.append(point->getCoordiantes().first);
+    pointCoordiantes.append(point->getCoordiantes().second);
+    p["coordinates"] = pointCoordiantes;
+    if (point->getPiece() != nullptr) {
+      QJsonObject pieceJson;
+      pieceJson["owner"] = point->getPiece()->getOwner()->getNum();
+      Settlement *settlemnt = dynamic_cast<Settlement *>(point->getPiece());
+      if (settlemnt != nullptr) {
+        pieceJson["type"] = (int)PieceType::Settlement;
+      } else {
+        pieceJson["type"] = (int)PieceType::City;
+      }
+      p["piece"] = pieceJson;
     }
-    player->removeDevelopmentCard(DevelopmentCard::RoadBuilding);
+    pointsArray.append(p);
+  }
+  boardJson["points"] = pointsArray;
+  QJsonArray roadsArray;
+  for (auto road : board->getRoads()) {
+    QJsonObject r;
+    QJsonArray roadPoints;
+    QJsonArray pointOne;
+    QJsonArray pointTwo;
+    pointOne.append(road->getStartPoint()->getCoordiantes().first);
+    pointOne.append(road->getStartPoint()->getCoordiantes().second);
+    pointTwo.append(road->getEndPoint()->getCoordiantes().first);
+    pointTwo.append(road->getEndPoint()->getCoordiantes().second);
+    roadPoints.append(pointOne);
+    roadPoints.append(pointTwo);
+    r["points"] = roadPoints;
+    r["owner"] = road->getOwner()->getNum();
+    roadsArray.append(r);
+  }
+  boardJson["roads"] = roadsArray;
+  QJsonArray harborsArray;
+  for (auto harbor : board->getHarbors()) {
+    QJsonObject h;
+    QJsonArray harborPoints;
+    QJsonArray pointOne;
+    QJsonArray pointTwo;
+    pointOne.append(harbor->getStartPoint()->getCoordiantes().first);
+    pointOne.append(harbor->getStartPoint()->getCoordiantes().second);
+    pointTwo.append(harbor->getEndPoint()->getCoordiantes().first);
+    pointTwo.append(harbor->getEndPoint()->getCoordiantes().second);
+    harborPoints.append(pointOne);
+    harborPoints.append(pointTwo);
+    h["points"] = harborPoints;
+    h["type"] = (int)harbor->getType();
+    harborsArray.append(h);
+  }
+  boardJson["harbors"] = harborsArray;
+  gameJson["board"] = boardJson;
+  if (longestRoadOwner != nullptr) {
+    gameJson["longesRoadOwner"] = longestRoadOwner->getNum();
+  }
+  if (largestArmyOwner != nullptr) {
+    gameJson["largestArmyOwner"] = largestArmyOwner->getNum();
+  }
+  gameJson["devCardsRemaining"] = developmentCards.length();
+  if (hasEnded) {
+    gameJson["hasEnded"] = true;
+    gameJson["winner"] = winner->getNum();
+  } else {
+    gameJson["hasEnded"] = false;
+  }
+  return gameJson;
 }

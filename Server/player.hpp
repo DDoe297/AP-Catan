@@ -21,8 +21,6 @@ class Player : public QObject {
  public:
   explicit Player(QString Name, Game *Game, int Num, Color Color,
                   QObject *parent = nullptr);
-  // To String
-  // To Map
   const QString &getName(void) const;
   int getNum(void) const;
   Color getColor(void) const;
@@ -45,6 +43,7 @@ class Player : public QObject {
   void checkLongestRoadUtil(Road *road, QVector<Road *> allRoads, int length);
   QVector<HarborType> getConnectedHarborTypes(void);
   QVector<Road *> getRoads(void);
+  int getRoadsCount(void);
   QVector<Road *> getConnectedRoads(Point *point, QVector<Road *> roads);
   int calculateVictoryPoints(bool includeDevelopmentCards);
   const QVector<DevelopmentCard> &getDevCards() const;
@@ -53,9 +52,12 @@ class Player : public QObject {
   int getKnights() const;
   int getLongestRoadLength() const;
   QVector<Piece *> getNonRoadPieces(void);
-  QVector<QPair<Point *,Point *>> getAvailableRoadCoordinates(void);
+  QVector<QPair<Point *, Point *>> getAvailableRoadCoordinates(void);
   QVector<Point *> getAvailableSettlementCoordinates(void);
   void increaseKnights(void);
+  int getCities() const;
+  int getSettelments() const;
+
  private:
   QString name;
   Game *game;

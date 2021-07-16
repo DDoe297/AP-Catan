@@ -11,8 +11,6 @@ class Road : public Piece {
  public:
   explicit Road(Player *Owner, Point *StartPoint, Point *EndPoint,
                 QObject *parent = nullptr);
-  // To Map
-  // To String
   Point *getStartPoint() const;
   Point *getEndPoint() const;
 

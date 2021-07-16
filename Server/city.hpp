@@ -7,8 +7,6 @@
 class City : public Piece {
  public:
   explicit City(Player *Owner, Point *point, QObject *parent = nullptr);
-  // To Map
-  // To String
   Point *getPoint() const;
 
  private:

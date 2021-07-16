@@ -53,8 +53,9 @@ class Board : public QObject {
   bool doesPlayerOwnSettelmentAroundTile(Tile *tile, Player *player);
   Tile *getTile(int i, int j);
   Point *getPoint(int i, int j);
+  Tile *getRobber() const;
 
- private:
+private:
   Game *game;
   QVector<QVector<Point *>> points;
   QVector<QVector<Tile *>> tiles;

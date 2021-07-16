@@ -48,7 +48,10 @@ StatusCode Player::buildSettelment(Point *point, bool gameStart) {
   Settlement *settlement = new Settlement(this, point);
   gameBoard->addPiece(settlement, point);
   victoryPoints++;
-  settlement--;
+  settelments--;
+  if (gameStart) {
+    gameBoard->addInitialResources(settlement);
+  }
   return StatusCode::OK;
 }
 
@@ -111,10 +114,7 @@ bool Player::hasCards(QVector<ResourceCard> cardsList) {
 
 bool Player::hasAnyCard() { return !cards.isEmpty(); }
 
-int Player::howManyOfResource(ResourceCard card)
-{
-    return cards.count(card);
-}
+int Player::howManyOfResource(ResourceCard card) { return cards.count(card); }
 
 StatusCode Player::removeCards(QVector<ResourceCard> cardsList) {
   if (!hasCards(cardsList)) {
@@ -175,7 +175,6 @@ StatusCode Player::finishTurn() {
 
 StatusCode Player::checkRoadLocation(Point *startPoint, Point *endPoint) {
   Board *gameBoard = game->getBoard();
-  QVector<Road *> roads = gameBoard->getRoads();
   if (!gameBoard->arePointsConnected(startPoint, endPoint)) {
     return StatusCode::NotConnected;
   }
@@ -222,6 +221,7 @@ QVector<HarborType> Player::getConnectedHarborTypes() {
   for (auto piece : pieces) {
     if (piece->getOwner() == this) {
       Settlement *settlement = dynamic_cast<Settlement *>(piece);
+      City *city = dynamic_cast<City *>(piece);
       if (settlement != nullptr) {
         for (auto harbor : allHarbors) {
           if (settlement->getPoint() == harbor->getStartPoint() ||
@@ -231,8 +231,7 @@ QVector<HarborType> Player::getConnectedHarborTypes() {
             }
           }
         }
-      } else {
-        City *city = dynamic_cast<City *>(piece);
+      } else if (city != nullptr) {
         for (auto harbor : allHarbors) {
           if (city->getPoint() == harbor->getStartPoint() ||
               city->getPoint() == harbor->getEndPoint()) {
@@ -257,6 +256,8 @@ QVector<Road *> Player::getRoads() {
   }
   return roads;
 }
+
+int Player::getRoadsCount() { return roads; }
 
 QVector<Road *> Player::getConnectedRoads(Point *point, QVector<Road *> roads) {
   QVector<Road *> connectedRoads;
@@ -304,90 +305,95 @@ int Player::getKnights() const { return knights; }
 
 int Player::getLongestRoadLength() const { return longestRoadLength; }
 
-QVector<Piece *> Player::getNonRoadPieces()
-{
-    QVector<Piece *> pieces;
-    QVector<Piece *> boardPieces=game->getBoard()->getPieces();
-    for(auto piece:boardPieces){
-        if(piece->getOwner()==this){
-            pieces.append(piece);
-        }
+QVector<Piece *> Player::getNonRoadPieces() {
+  QVector<Piece *> pieces;
+  QVector<Piece *> boardPieces = game->getBoard()->getPieces();
+  for (auto piece : boardPieces) {
+    if (piece->getOwner() == this) {
+      pieces.append(piece);
     }
-    return pieces;
+  }
+  return pieces;
 }
 
-QVector<QPair<Point *, Point *>> Player::getAvailableRoadCoordinates()
-{
-    QVector<QPair<Point *, Point *>> availableCoordinates;
-    Board *gameBoard=game->getBoard();
-    for(auto road:getRoads()){
-        for(auto inpoint:{road->getStartPoint(),road->getEndPoint()}){
-            if(inpoint->getPiece()!=nullptr&&inpoint->getPiece()->getOwner()!=this){
-                continue;
-            }
-            for(auto point:inpoint->getNeighbouringPoints(gameBoard)){
-                if(gameBoard->getRoad(point,inpoint)==nullptr&&!availableCoordinates.contains({point,inpoint})&&!availableCoordinates.contains({inpoint,point})){
-                    availableCoordinates.push_back({point,inpoint});
-                }
-            }
+QVector<QPair<Point *, Point *>> Player::getAvailableRoadCoordinates() {
+  QVector<QPair<Point *, Point *>> availableCoordinates;
+  Board *gameBoard = game->getBoard();
+  for (auto road : getRoads()) {
+    for (auto inpoint : {road->getStartPoint(), road->getEndPoint()}) {
+      if (inpoint->getPiece() != nullptr &&
+          inpoint->getPiece()->getOwner() != this) {
+        continue;
+      }
+      for (auto point : inpoint->getNeighbouringPoints(gameBoard)) {
+        if (gameBoard->getRoad(point, inpoint) == nullptr &&
+            !availableCoordinates.contains({point, inpoint}) &&
+            !availableCoordinates.contains({inpoint, point})) {
+          availableCoordinates.push_back({point, inpoint});
         }
+      }
     }
-    for(auto piece:getNonRoadPieces()){
-        Settlement *settlement=dynamic_cast<Settlement *>(piece);
-        Point *inpoint;
-        if(settlement!=nullptr){
-            inpoint=settlement->getPoint();
+  }
+  for (auto piece : getNonRoadPieces()) {
+    Settlement *settlement = dynamic_cast<Settlement *>(piece);
+    City *city = dynamic_cast<City *>(piece);
+    Point *inpoint = nullptr;
+    if (settlement != nullptr) {
+      inpoint = settlement->getPoint();
+    } else if (city != nullptr) {
+      inpoint = city->getPoint();
+    }
+    if (inpoint != nullptr) {
+      for (auto point : inpoint->getNeighbouringPoints(gameBoard)) {
+        if (gameBoard->getRoad(point, inpoint) == nullptr &&
+            !availableCoordinates.contains({point, inpoint}) &&
+            !availableCoordinates.contains({inpoint, point})) {
+          availableCoordinates.push_back({point, inpoint});
         }
-        else{
-            City *city=dynamic_cast<City *>(piece);
-            inpoint=city->getPoint();
-        }
-        for(auto point:inpoint->getNeighbouringPoints(gameBoard)){
-            if(gameBoard->getRoad(point,inpoint)==nullptr&&!availableCoordinates.contains({point,inpoint})&&!availableCoordinates.contains({inpoint,point})){
-                availableCoordinates.push_back({point,inpoint});
-            }
-        }
-   }
-    return availableCoordinates;
+      }
+    }
+  }
+  return availableCoordinates;
 }
 
-QVector<Point *> Player::getAvailableSettlementCoordinates()
-{
-    QVector<Point *> availableCoordinates;
-    Board *gameBoard=game->getBoard();
-    QVector<Point *> boardPoints=gameBoard->getAllPoints();
-    for(auto point:boardPoints){
-        if(point->getPiece()!=nullptr){
-            continue;
-        }
-        if(getNonRoadPieces().length()>=2){
-            bool connectedToRoad=false;
-            for(auto road:gameBoard->getRoads()){
-                if((road->getStartPoint()==point || road->getEndPoint()==point) && road->getOwner()==this){
-                    connectedToRoad=true;
-                    break;
-                }
-            }
-            if(!connectedToRoad){
-                continue;
-            }
-        }
-        bool settlementNear=false;
-        for(auto p:point->getNeighbouringPoints(gameBoard)){
-            if(p->getPiece()!=nullptr){
-                settlementNear=true;
-                break;
-            }
-        }
-        if(settlementNear){
-            continue;
-        }
-        availableCoordinates.append(point);
+QVector<Point *> Player::getAvailableSettlementCoordinates() {
+  QVector<Point *> availableCoordinates;
+  Board *gameBoard = game->getBoard();
+  QVector<Point *> boardPoints = gameBoard->getAllPoints();
+  for (auto point : boardPoints) {
+    if (point->getPiece() != nullptr) {
+      continue;
     }
-    return availableCoordinates;
+    if (getNonRoadPieces().length() >= 2) {
+      bool connectedToRoad = false;
+      for (auto road : gameBoard->getRoads()) {
+        if ((road->getStartPoint() == point || road->getEndPoint() == point) &&
+            road->getOwner() == this) {
+          connectedToRoad = true;
+          break;
+        }
+      }
+      if (!connectedToRoad) {
+        continue;
+      }
+    }
+    bool settlementNear = false;
+    for (auto p : point->getNeighbouringPoints(gameBoard)) {
+      if (p->getPiece() != nullptr) {
+        settlementNear = true;
+        break;
+      }
+    }
+    if (settlementNear) {
+      continue;
+    }
+    availableCoordinates.append(point);
+  }
+  return availableCoordinates;
 }
 
-void Player::increaseKnights()
-{
-    knights++;
-}
+void Player::increaseKnights() { knights++; }
+
+int Player::getCities() const { return cities; }
+
+int Player::getSettelments() const { return settelments; }
