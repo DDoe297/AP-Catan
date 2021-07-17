@@ -49,8 +49,8 @@ class Board : public QObject {
   QVector<Point *> getAllPoints(void);
   QVector<Tile *> getAllTiles(void);
   QVector<Point *> borderPoints(void);
-  QVector<Player *> playersWhoOwnSettelmentAroundTile(Tile *tile);
-  bool doesPlayerOwnSettelmentAroundTile(Tile *tile, Player *player);
+  QVector<Player *> playersWhoOwnSettlementAroundTile(Tile *tile);
+  bool doesPlayerOwnSettlementAroundTile(Tile *tile, Player *player);
   Tile *getTile(int i, int j);
   Point *getPoint(int i, int j);
   Tile *getRobber() const;

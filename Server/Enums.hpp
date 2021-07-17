@@ -42,7 +42,7 @@ enum class DevelopmentCard {
 
 enum class Color { Red = 0, Blue = 1, White = 2, Orange = 3 };
 
-const QVector<ResourceCard> settelmentPrice = {
+const QVector<ResourceCard> settlementPrice = {
     ResourceCard::Wool, ResourceCard::Lumber, ResourceCard::Brick,
     ResourceCard::Grain};
 

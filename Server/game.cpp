@@ -6,7 +6,6 @@ Game::Game(QVector<initialPlayerData> data, int numberOfPlayers,
   board = new Board(this);
   for (int i = 0; i < numberOfPlayers; i++) {
     Player *newPlayer = new Player(data[i].name, this, i, data[i].color);
-    // Get input for name and color
     players.append(newPlayer);
   }
   victoryPointsToWin = VictoryPointsToWin;
@@ -34,15 +33,15 @@ StatusCode Game::addRoad(Player *player, Point *startPoint, Point *endPoint,
 }
 
 StatusCode Game::addSettlement(Player *player, Point *point, bool gameStart) {
-  StatusCode code = player->buildSettelment(point, gameStart);
+  StatusCode code = player->buildSettlement(point, gameStart);
   if (code == StatusCode::OK) {
     checkForWinner();
   }
   return code;
 }
 
-StatusCode Game::upgradeSettelment(Player *player, Point *point) {
-  StatusCode code = player->buildSettelment(point);
+StatusCode Game::upgradeSettlement(Player *player, Point *point) {
+  StatusCode code = player->buildSettlement(point);
   if (code == StatusCode::OK) {
     checkForWinner();
   }
@@ -116,10 +115,10 @@ StatusCode Game::tradeWithBank(Player *getter, ResourceCard getCard,
 }
 
 StatusCode Game::activateRobber(Tile *tile, Player *player, Player *victim) {
-  if (!board->doesPlayerOwnSettelmentAroundTile(tile, victim)) {
+  if (!board->doesPlayerOwnSettlementAroundTile(tile, victim)) {
     return StatusCode::BadInput;
   }
-  for (auto player : board->playersWhoOwnSettelmentAroundTile(tile)) {
+  for (auto player : board->playersWhoOwnSettlementAroundTile(tile)) {
     player->randomlyRemoveHalfOfCards();
   }
   board->moveRobber(tile);
@@ -237,7 +236,7 @@ QJsonObject Game::toJSON() {
     p["VPs"] = player->calculateVictoryPoints(true);
     p["roads"] = player->getRoadsCount();
     p["cities"] = player->getCities();
-    p["settlements"] = player->getSettelments();
+    p["settlements"] = player->getSettlements();
     p["knights"] = player->getKnights();
     QJsonArray playerCards;
     for (auto card : player->getCards()) {

@@ -315,7 +315,7 @@ QVector<Point *> Board::borderPoints()
     return borderPoints;
 }
 
-QVector<Player *> Board::playersWhoOwnSettelmentAroundTile(Tile *tile)
+QVector<Player *> Board::playersWhoOwnSettlementAroundTile(Tile *tile)
 {
     QVector<Player *> players;
     QVector<Point *> points=tile->getPoints();
@@ -327,7 +327,7 @@ QVector<Player *> Board::playersWhoOwnSettelmentAroundTile(Tile *tile)
     return players;
 }
 
-bool Board::doesPlayerOwnSettelmentAroundTile(Tile *tile, Player *player)
+bool Board::doesPlayerOwnSettlementAroundTile(Tile *tile, Player *player)
 {
     for(auto point:tile->getPoints()){
         if(point->getPiece()!=nullptr){

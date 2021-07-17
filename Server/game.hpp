@@ -30,7 +30,7 @@ class Game : public QObject {
                      bool gameStart = false);
   StatusCode addSettlement(Player *player, Point *point,
                            bool gameStart = false);
-  StatusCode upgradeSettelment(Player *player, Point *point);
+  StatusCode upgradeSettlement(Player *player, Point *point);
   bool checkForWinner(void);
   bool getHasEnded() const;
   Player *getWinner() const;

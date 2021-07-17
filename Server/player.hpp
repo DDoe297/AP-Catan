@@ -24,10 +24,10 @@ class Player : public QObject {
   const QString &getName(void) const;
   int getNum(void) const;
   Color getColor(void) const;
-  StatusCode buildSettelment(Point *point, bool gameStart = false);
+  StatusCode buildSettlement(Point *point, bool gameStart = false);
   StatusCode buildRoad(Point *startPoint, Point *endPoint,
                        bool gameStart = false);
-  StatusCode upgradeSettelmentToCity(Point *point);
+  StatusCode upgradeSettlementToCity(Point *point);
   bool hasCards(QVector<ResourceCard> cardsList);
   bool hasAnyCard(void);
   int howManyOfResource(ResourceCard card);
@@ -56,7 +56,7 @@ class Player : public QObject {
   QVector<Point *> getAvailableSettlementCoordinates(void);
   void increaseKnights(void);
   int getCities() const;
-  int getSettelments() const;
+  int getSettlements() const;
 
  private:
   QString name;
@@ -71,7 +71,7 @@ class Player : public QObject {
   int longestRoadLength;
   int roads;
   int cities;
-  int settelments;
+  int settlements;
 };
 
 #endif  // PLAYER_HPP

@@ -6,7 +6,7 @@
 #include "game.hpp"
 
 int main(void) {
-  QFile file("2.txt");
+  QFile file("DataExample.json");
   QVector<initialPlayerData> d;
   d.append({"Danny", Color::Blue});
   d.append({"Hadi", Color::Orange});

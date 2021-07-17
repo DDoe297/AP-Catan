@@ -10,7 +10,7 @@ Player::Player(QString Name, Game *Game, int Num, Color Color, QObject *parent)
   knights = 0;
   longestRoadLength = 0;
   roads = 15;
-  settelments = 5;
+  settlements = 5;
   cities = 4;
 }
 
@@ -20,13 +20,13 @@ int Player::getNum() const { return num; }
 
 Color Player::getColor() const { return color; }
 
-StatusCode Player::buildSettelment(Point *point, bool gameStart) {
+StatusCode Player::buildSettlement(Point *point, bool gameStart) {
   Board *gameBoard = game->getBoard();
-  if (settelments == 0) {
+  if (settlements == 0) {
     return StatusCode::OutOfPieces;
   }
   if (!gameStart) {
-    if (!hasCards(settelmentPrice)) {
+    if (!hasCards(settlementPrice)) {
       return StatusCode::BadDeck;
     }
     if (!gameBoard->isPointConnectedToPlayerRoad(point, this)) {
@@ -43,12 +43,12 @@ StatusCode Player::buildSettelment(Point *point, bool gameStart) {
     }
   }
   if (!gameStart) {
-    removeCards(settelmentPrice);
+    removeCards(settlementPrice);
   }
   Settlement *settlement = new Settlement(this, point);
   gameBoard->addPiece(settlement, point);
   victoryPoints++;
-  settelments--;
+  settlements--;
   if (gameStart) {
     gameBoard->addInitialResources(settlement);
   }
@@ -77,7 +77,7 @@ StatusCode Player::buildRoad(Point *startPoint, Point *endPoint,
   return StatusCode::OK;
 }
 
-StatusCode Player::upgradeSettelmentToCity(Point *point) {
+StatusCode Player::upgradeSettlementToCity(Point *point) {
   if (cities == 0) {
     return StatusCode::OutOfPieces;
   }
@@ -97,7 +97,7 @@ StatusCode Player::upgradeSettelmentToCity(Point *point) {
   point->setPiece(newCity);
   victoryPoints++;
   cities--;
-  settelments++;
+  settlements++;
   return StatusCode::OK;
 }
 
@@ -396,4 +396,4 @@ void Player::increaseKnights() { knights++; }
 
 int Player::getCities() const { return cities; }
 
-int Player::getSettelments() const { return settelments; }
+int Player::getSettlements() const { return settlements; }

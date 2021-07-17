@@ -1,5 +1,5 @@
-#ifndef SETTELMENT_HPP
-#define SETTELMENT_HPP
+#ifndef SETTLEMENT_HPP
+#define SETTLEMENT_HPP
 
 #include "piece.hpp"
 #include "point.hpp"
@@ -13,4 +13,4 @@ class Settlement : public Piece {
   Point *point;
 };
 
-#endif  // SETTELMENT_HPP
+#endif  // SETTLEMENT_HPP
