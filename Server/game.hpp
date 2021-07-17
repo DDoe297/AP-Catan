@@ -45,19 +45,24 @@ class Game : public QObject {
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
-  void playMonoploly(Player *player, ResourceCard card);
-  void playeYearOfPlenty(Player *player, ResourceCard cardOne,
-                         ResourceCard cardTwo);
-  void playKnight(Player *player, Tile *tile, Player *victim);
-  void playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad,
-                        QPair<Point *, Point *> secondRoad);
+  StatusCode playMonoploly(Player *player, ResourceCard card);
+  StatusCode playeYearOfPlenty(Player *player, ResourceCard cardOne,
+                               ResourceCard cardTwo);
+  StatusCode playKnight(Player *player, Tile *tile, Player *victim);
+  StatusCode playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad,
+                              QPair<Point *, Point *> secondRoad);
   QJsonObject toJSON(void);
+  bool hasCards(QVector<ResourceCard> cardsList);
+  StatusCode removeCards(QVector<ResourceCard> cardsList);
+  StatusCode addCards(QVector<ResourceCard> cardsList);
+  const QVector<Player *> &getPlayers() const;
 
  private:
   Board *board;
   Player *largestArmyOwner;
   Player *longestRoadOwner;
   QVector<Player *> players;
+  QVector<ResourceCard> cards;
   int victoryPointsToWin;
   QVector<DevelopmentCard> developmentCards;
   bool hasEnded;

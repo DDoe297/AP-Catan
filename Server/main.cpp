@@ -30,6 +30,7 @@ int main(void) {
                  game.getBoard()->getPoint(1, 0), true);
     game.addRoad(game.getPlayer(2), game.getBoard()->getPoint(2, 5),
                  game.getBoard()->getPoint(2, 4), true);
+    game.getBoard()->addResource(5);
     QJsonDocument save(game.toJSON());
     file.write(save.toJson());
   }

@@ -11,6 +11,7 @@ Game::Game(QVector<initialPlayerData> data, int numberOfPlayers,
   victoryPointsToWin = VictoryPointsToWin;
   developmentCards = QVector<DevelopmentCard>(devCards);
   shuffle(developmentCards);
+  cards = gameDeck();
   hasEnded = false;
   longestRoadOwner = nullptr;
   largestArmyOwner = nullptr;
@@ -110,7 +111,9 @@ StatusCode Game::tradeWithBank(Player *getter, ResourceCard getCard,
     }
   }
   getter->removeCards(giveCards);
+  addCards(giveCards);
   getter->addCards({getCard});
+  removeCards({getCard});
   return StatusCode::OK;
 }
 
@@ -167,9 +170,9 @@ void Game::checkForLargestArmy() {
   }
 }
 
-void Game::playMonoploly(Player *player, ResourceCard card) {
+StatusCode Game::playMonoploly(Player *player, ResourceCard card) {
   if (!player->hasDevelopmentCard(DevelopmentCard::Monopoly)) {
-    return;
+    return StatusCode::BadDeck;
   }
   for (auto p : players) {
     if (p == player) {
@@ -186,43 +189,56 @@ void Game::playMonoploly(Player *player, ResourceCard card) {
     }
   }
   player->removeDevelopmentCard(DevelopmentCard::Monopoly);
+  return StatusCode::OK;
 }
 
-void Game::playeYearOfPlenty(Player *player, ResourceCard cardOne,
-                             ResourceCard cardTwo) {
+StatusCode Game::playeYearOfPlenty(Player *player, ResourceCard cardOne,
+                                   ResourceCard cardTwo) {
   if (!player->hasDevelopmentCard(DevelopmentCard::YearOfPlenty)) {
-    return;
+    return StatusCode::BadDeck;
+  } else if (!hasCards({{cardOne, cardTwo}})) {
+    return StatusCode::BadDeck;
   }
   player->addCards({cardOne, cardTwo});
+  removeCards({cardOne, cardTwo});
   player->removeDevelopmentCard(DevelopmentCard::YearOfPlenty);
+  return StatusCode::OK;
 }
 
-void Game::playKnight(Player *player, Tile *tile, Player *victim) {
+StatusCode Game::playKnight(Player *player, Tile *tile, Player *victim) {
   if (!player->hasDevelopmentCard(DevelopmentCard::Knight)) {
-    return;
+    return StatusCode::BadDeck;
   }
   activateRobber(tile, player, victim);
   player->increaseKnights();
   player->removeDevelopmentCard(DevelopmentCard::Knight);
+  return StatusCode::OK;
 }
 
-void Game::playRoadBuilding(Player *player, QPair<Point *, Point *> firstRoad,
-                            QPair<Point *, Point *> secondRoad) {
+StatusCode Game::playRoadBuilding(Player *player,
+                                  QPair<Point *, Point *> firstRoad,
+                                  QPair<Point *, Point *> secondRoad) {
+  QVector<ResourceCard> cardsToAdd;
+  cardsToAdd.append(roadPrice);
+  cardsToAdd.append(roadPrice);
   if (!player->hasDevelopmentCard(DevelopmentCard::RoadBuilding)) {
-    return;
+    return StatusCode::BadDeck;
+  } else if (!hasCards(cardsToAdd)) {
+    return StatusCode::BadDeck;
   }
   if (player->checkRoadLocation(firstRoad.first, firstRoad.second) ==
           StatusCode::OK &&
       player->checkRoadLocation(secondRoad.first, secondRoad.second) ==
           StatusCode::OK) {
-    player->addCards(roadPrice);
+    player->addCards(cardsToAdd);
+    removeCards(cardsToAdd);
     player->buildRoad(firstRoad.first, firstRoad.second);
-    player->addCards(roadPrice);
     player->buildRoad(secondRoad.first, secondRoad.second);
   } else {
-    return;
+    return StatusCode::WrongPoint;
   }
   player->removeDevelopmentCard(DevelopmentCard::RoadBuilding);
+  return StatusCode::OK;
 }
 
 QJsonObject Game::toJSON() {
@@ -337,5 +353,40 @@ QJsonObject Game::toJSON() {
   } else {
     gameJson["hasEnded"] = false;
   }
+  QJsonArray boardCards;
+  for (auto card : cards) {
+    boardCards.append((int)card);
+  }
+  gameJson["cards"] = boardCards;
   return gameJson;
 }
+
+bool Game::hasCards(QVector<ResourceCard> cardsList) {
+  QVector<ResourceCard> cardsCopy(cards);
+  for (auto card : cardsList) {
+    if (!cardsCopy.contains(card)) {
+      return false;
+    }
+    cardsCopy.removeOne(card);
+  }
+  return true;
+}
+
+StatusCode Game::removeCards(QVector<ResourceCard> cardsList) {
+  if (!hasCards(cardsList)) {
+    return StatusCode::BadDeck;
+  }
+  for (auto card : cardsList) {
+    cards.removeOne(card);
+  }
+  return StatusCode::OK;
+}
+
+StatusCode Game::addCards(QVector<ResourceCard> cardsList) {
+  for (auto card : cardsList) {
+    cards.append(card);
+  }
+  return StatusCode::OK;
+}
+
+const QVector<Player *> &Game::getPlayers() const { return players; }

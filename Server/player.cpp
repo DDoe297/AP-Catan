@@ -44,6 +44,7 @@ StatusCode Player::buildSettlement(Point *point, bool gameStart) {
   }
   if (!gameStart) {
     removeCards(settlementPrice);
+    game->addCards(settlementPrice);
   }
   Settlement *settlement = new Settlement(this, point);
   gameBoard->addPiece(settlement, point);
@@ -69,6 +70,7 @@ StatusCode Player::buildRoad(Point *startPoint, Point *endPoint,
       return StatusCode::BadDeck;
     }
     removeCards(roadPrice);
+    game->addCards(roadPrice);
   }
   Road *road = new Road(this, startPoint, endPoint);
   game->getBoard()->addRoad(road);
@@ -92,6 +94,7 @@ StatusCode Player::upgradeSettlementToCity(Point *point) {
     return StatusCode::BadDeck;
   }
   removeCards(cityPrice);
+  game->addCards(cityPrice);
   delete settlement;
   City *newCity = new City(this, point);
   point->setPiece(newCity);
@@ -149,6 +152,7 @@ StatusCode Player::buyDevelopmentCard(void) {
     return StatusCode::BadDeck;
   }
   removeCards(devCardPrice);
+  game->addCards(devCardPrice);
   newDevCards.append(gameDevCards.last());
   gameDevCards.removeLast();
   return StatusCode::OK;

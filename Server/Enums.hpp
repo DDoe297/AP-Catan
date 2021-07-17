@@ -98,4 +98,7 @@ const QVector<DevelopmentCard> devCards = {
     DevelopmentCard::Knight,       DevelopmentCard::Knight,
     DevelopmentCard::Knight,
 };
+
+const QVector<ResourceCard> gameDeck(void);
+
 #endif  // ENUMS_HPP

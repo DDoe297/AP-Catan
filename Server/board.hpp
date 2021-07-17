@@ -55,7 +55,7 @@ class Board : public QObject {
   Point *getPoint(int i, int j);
   Tile *getRobber() const;
 
-private:
+ private:
   Game *game;
   QVector<QVector<Point *>> points;
   QVector<QVector<Tile *>> tiles;
