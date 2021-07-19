@@ -1,5 +1,6 @@
 QT -= gui
-
+QT += core
+QT += network
 CONFIG += c++11 console
 CONFIG -= app_bundle
 
@@ -22,7 +23,9 @@ SOURCES += \
         settlement.cpp \
         tile.cpp \
         trade.cpp \
-        tradeanswer.cpp
+        tradeanswer.cpp \
+        server.cpp \
+        worker.cpp 
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -52,4 +55,6 @@ HEADERS += \
     settlement.hpp \
     tile.hpp \
     trade.hpp \
-    tradeanswer.hpp
+    tradeanswer.hpp \
+    server.hpp \
+    worker.hpp 
