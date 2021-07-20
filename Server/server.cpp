@@ -50,6 +50,6 @@ void Server::startServer()
 
 void Server::read(QByteArray data, qintptr descriptor)
 {
-    QJsonObject json=QJsonDocument::fromJson(data).object();
+    QJsonObject json = QJsonDocument::fromJson(data).object();
     commandQueue.enqueue(json);
 }

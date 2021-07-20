@@ -40,7 +40,7 @@ class Game : public QObject {
   StatusCode tradeWithBank(Player *getter, ResourceCard getCard,
                            QVector<ResourceCard> giveCards);
   StatusCode activateRobber(Tile *tile, Player *player, Player *victim);
-  int getRoll(void);
+  QPair<int,int> getRoll(void);
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
@@ -57,7 +57,7 @@ class Game : public QObject {
   const QVector<Player *> &getPlayers() const;
   void newTrade(Player *player, QVector<ResourceCard> getCards);
   void endTurn();
-  int getLastRoll() const;
+   QPair<int,int> getLastRoll() const;
   int getCurrentPlayerID() const;
   int getTurnNumber() const;
   bool getStartPhase() const;
@@ -75,7 +75,7 @@ private:
   QVector<DevelopmentCard> developmentCards;
   bool hasEnded;
   Player *winner;
-  int lastRoll;
+   QPair<int,int> lastRoll;
   int currentPlayerID;
   int turnNumber;
   bool startPhase;

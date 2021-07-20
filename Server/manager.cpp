@@ -37,8 +37,9 @@ void Manager::playerChoice(){
             }
             if(!game->getStartPhase()){
                 if(command=="roll"){
-                    game->getRoll();
-                }else if((command=="activate robber" && game->getLastRoll()==7)){
+                    QPair<int,int> roll = game->getRoll();
+                    game->getBoard()->addResource(roll.first+roll.second);
+                }else if((command=="activate robber" && game->getLastRoll().first+game->getLastRoll().second==7)){
                     QJsonArray coordinates=clientMessage["coordinates"].toArray();
                     int victimId=clientMessage["victim"].toInt();
                     game->activateRobber(game->getBoard()->getTile(coordinates[0].toInt(),coordinates[1].toInt()),game->getPlayer(game->getCurrentPlayerID()),game->getPlayer(victimId));

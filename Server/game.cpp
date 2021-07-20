@@ -17,7 +17,7 @@ Game::Game(QVector<QString> names, int numberOfPlayers,
   largestArmyOwner = nullptr;
   winner = nullptr;
   currentPlayerID=0;
-  lastRoll=0;
+  lastRoll={0,0};
   turnNumber=0;
   startPhase = true;
   tradeHolder=nullptr;
@@ -137,8 +137,8 @@ StatusCode Game::activateRobber(Tile *tile, Player *player, Player *victim) {
   return StatusCode::OK;
 }
 
-int Game::getRoll() {
-    lastRoll=randomNumber(1, 6) + randomNumber(1, 6);
+QPair<int,int> Game::getRoll() {
+    lastRoll={randomNumber(1, 6) , randomNumber(1, 6)};
     return lastRoll;
 }
 
@@ -366,7 +366,10 @@ QJsonObject Game::toJSON() {
     boardCards.append((int)card);
   }
   gameJson["cards"] = boardCards;
-  gameJson["last roll"]=getLastRoll();
+  QJsonArray roll;
+  roll.append(lastRoll.first);
+  roll.append(lastRoll.second);
+  gameJson["last roll"]=roll;
   gameJson["current player"]=getCurrentPlayerID();
   gameJson["turn number"]=turnNumber;
   gameJson["start phase"]=startPhase;
@@ -438,7 +441,7 @@ void Game::endTurn()
     turnNumber++;
 }
 
-int Game::getLastRoll() const
+QPair<int,int> Game::getLastRoll() const
 {
     return lastRoll;
 }
