@@ -44,6 +44,8 @@ HEADERS += \
     Road_FWD.hpp \
     StatusCodes.hpp \
     Tile_FWD.hpp \
+    TradeAnswer_FWD.hpp \
+    Trade_FWD.hpp \
     Utility.hpp \
     board.hpp \
     city.hpp \

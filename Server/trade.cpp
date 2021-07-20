@@ -31,4 +31,10 @@ void Trade::acceptAnswer(int index) {
   Player *giver = answers[index]->getGiver();
   QVector<ResourceCard> giveCards = answers[index]->getCards();
   game->trade(getter, giver, getCards, giveCards);
+  game->setTradeHolder(nullptr);
+}
+
+Player *Trade::getGetter() const
+{
+    return getter;
 }

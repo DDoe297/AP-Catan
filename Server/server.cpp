@@ -19,7 +19,7 @@ void Server::incomingConnection(qintptr socketDescriptor)
     }
 }
 
-const QQueue<QJsonObject> &Server::getCommandQueue() const
+QQueue<QJsonObject> &Server::getCommandQueue()
 {
     return commandQueue;
 }

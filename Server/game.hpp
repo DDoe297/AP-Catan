@@ -8,9 +8,13 @@
 #include "Board_FWD.hpp"
 #include "Enums.hpp"
 #include "Game_FWD.hpp"
+#include "Trade_FWD.hpp"
+#include "TradeAnswer_FWD.hpp"
 #include "Player_FWD.hpp"
 #include "board.hpp"
 #include "tile.hpp"
+#include "trade.hpp"
+#include "tradeanswer.hpp"
 
 class Game : public QObject {
   Q_OBJECT
@@ -51,12 +55,15 @@ class Game : public QObject {
   StatusCode removeCards(QVector<ResourceCard> cardsList);
   StatusCode addCards(QVector<ResourceCard> cardsList);
   const QVector<Player *> &getPlayers() const;
+  void newTrade(Player *player, QVector<ResourceCard> getCards);
   void endTurn();
   int getLastRoll() const;
   int getCurrentPlayerID() const;
   int getTurnNumber() const;
   bool getStartPhase() const;
   void setStartPhase(bool newStartPhase);
+  Trade *getTradeHolder() const;
+  void setTradeHolder(Trade *newTradeHolder);
 
 private:
   Board *board;
@@ -72,6 +79,7 @@ private:
   int currentPlayerID;
   int turnNumber;
   bool startPhase;
+  Trade *tradeHolder;
 };
 
 #endif  // GAME_HPP

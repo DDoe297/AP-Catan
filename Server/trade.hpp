@@ -5,6 +5,9 @@
 #include <QVector>
 
 #include "Enums.hpp"
+#include "Trade_FWD.hpp"
+#include "Game_FWD.hpp"
+#include "TradeAnswer_FWD.hpp"
 #include "game.hpp"
 #include "player.hpp"
 #include "tradeanswer.hpp"
@@ -20,8 +23,9 @@ class Trade : public QObject {
   void setGetCards(const QVector<ResourceCard> &newGetCards);
   const QVector<TradeAnswer *> &getAnswers() const;
   void acceptAnswer(int index);
+  Player *getGetter() const;
 
- private:
+private:
   Game *game;
   Player *getter;
   QVector<ResourceCard> getCards;

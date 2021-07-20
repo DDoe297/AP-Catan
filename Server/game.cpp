@@ -20,6 +20,7 @@ Game::Game(QVector<QString> names, int numberOfPlayers,
   lastRoll=0;
   turnNumber=0;
   startPhase = true;
+  tradeHolder=nullptr;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -369,6 +370,30 @@ QJsonObject Game::toJSON() {
   gameJson["current player"]=getCurrentPlayerID();
   gameJson["turn number"]=turnNumber;
   gameJson["start phase"]=startPhase;
+  if(tradeHolder!=nullptr){
+  QJsonObject trade;
+  trade["player id"]=tradeHolder->getGetter()->getNum();
+  QJsonArray tradeGet;
+  for(auto card:tradeHolder->getGetCards()){
+      tradeGet.append((int)card);
+  }
+  trade["get cards"]=tradeGet;
+  QJsonArray tradeAnswers;
+  int i=0;
+  for(auto answer:tradeHolder->getAnswers()){
+      QJsonObject tradeAnswer;
+      tradeAnswer["id"]=i++;
+      tradeAnswer["player id"]=answer->getGiver()->getNum();
+      QJsonArray tradeGive;
+      for(auto card:answer->getCards()){
+          tradeGive.append((int)card);
+      }
+      tradeAnswer["give cards"]=tradeGive;
+      tradeAnswers.append(tradeAnswer);
+  }
+  trade["answers"]=tradeAnswers;
+  gameJson["trade"]=trade;
+  }
   return gameJson;
 }
 
@@ -402,6 +427,11 @@ StatusCode Game::addCards(QVector<ResourceCard> cardsList) {
 
 const QVector<Player *> &Game::getPlayers() const { return players; }
 
+void Game::newTrade(Player *player, QVector<ResourceCard> getCards)
+{
+    tradeHolder = new Trade(this, player,getCards);
+}
+
 void Game::endTurn()
 {
     currentPlayerID = (currentPlayerID+1)%players.length();
@@ -431,4 +461,14 @@ bool Game::getStartPhase() const
 void Game::setStartPhase(bool newStartPhase)
 {
     startPhase = newStartPhase;
+}
+
+Trade *Game::getTradeHolder() const
+{
+    return tradeHolder;
+}
+
+void Game::setTradeHolder(Trade *newTradeHolder)
+{
+    tradeHolder = newTradeHolder;
 }
