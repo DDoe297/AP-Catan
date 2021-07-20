@@ -12,6 +12,7 @@ class Server : public QTcpServer
 private:
  void incomingConnection(qintptr socketDescriptor);
  QVector<QThread*> workerThreads;
+ int players;
 public:
  Server(QObject *parent = 0);
  ~Server();
@@ -20,7 +21,7 @@ signals:
  void write(QByteArray);
  void run(void);
 public slots:
- void read(int data,qintptr descriptor);
+ void read(QByteArray data,qintptr descriptor);
 };
 
 #endif // SERVER_HPP

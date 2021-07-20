@@ -1,11 +1,11 @@
 #include "game.hpp"
 
-Game::Game(QVector<initialPlayerData> data, int numberOfPlayers,
+Game::Game(QVector<QString> names, int numberOfPlayers,
            int VictoryPointsToWin, QObject *parent)
     : QObject(parent) {
   board = new Board(this);
   for (int i = 0; i < numberOfPlayers; i++) {
-    Player *newPlayer = new Player(data[i].name, this, i, data[i].color);
+    Player *newPlayer = new Player(names[i], this, i, (Color)i);
     players.append(newPlayer);
   }
   victoryPointsToWin = VictoryPointsToWin;
@@ -16,6 +16,8 @@ Game::Game(QVector<initialPlayerData> data, int numberOfPlayers,
   longestRoadOwner = nullptr;
   largestArmyOwner = nullptr;
   winner = nullptr;
+  currentPlayerID=0;
+  lastRoll=0;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -132,7 +134,10 @@ StatusCode Game::activateRobber(Tile *tile, Player *player, Player *victim) {
   return StatusCode::OK;
 }
 
-int Game::getRoll() { return randomNumber(1, 6) + randomNumber(1, 6); }
+int Game::getRoll() {
+    lastRoll=randomNumber(1, 6) + randomNumber(1, 6);
+    return lastRoll;
+}
 
 Player *Game::getPlayer(int i) {
   if (i < players.length()) {
@@ -358,6 +363,8 @@ QJsonObject Game::toJSON() {
     boardCards.append((int)card);
   }
   gameJson["cards"] = boardCards;
+  gameJson["last roll"]=getLastRoll();
+  gameJson["current player"]=getCurrentPlayerID();
   return gameJson;
 }
 
@@ -390,3 +397,18 @@ StatusCode Game::addCards(QVector<ResourceCard> cardsList) {
 }
 
 const QVector<Player *> &Game::getPlayers() const { return players; }
+
+void Game::endTurn()
+{
+    currentPlayerID = (currentPlayerID+1)%players.length();
+}
+
+int Game::getLastRoll() const
+{
+    return lastRoll;
+}
+
+int Game::getCurrentPlayerID() const
+{
+    return currentPlayerID;
+}

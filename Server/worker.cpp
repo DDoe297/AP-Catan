@@ -1,9 +1,10 @@
 #include "worker.hpp"
 
-Worker::Worker(qintptr ID,QObject *parent) : QObject(parent)
+Worker::Worker(int PlayerID,qintptr ID,QObject *parent) : QObject(parent)
 {
     socketDescriptor = ID;
     socket=nullptr;
+    playerID=PlayerID;
 }
 
 void Worker::start()
@@ -14,10 +15,17 @@ void Worker::start()
       emit error(socket->error());
       return;
     }
+    socket->write(QString::number(playerID).toStdString().c_str());
+    socket->waitForReadyRead();
+    QByteArray data = socket->readAll();
+    emit sendPlayerName(QString(data));
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()),
             Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    qDebug() << socketDescriptor << " Client connected";}
+    }
+    if(playerID==3){
+        emit startGame();
+    }
 }
 
 void Worker::writeToSocket(QByteArray data)
@@ -28,8 +36,7 @@ void Worker::writeToSocket(QByteArray data)
 void Worker::readyRead()
 {
     QByteArray Data = socket->readAll();
-    int number = QString(Data).toInt();
-    emit readFromSocket(number,socketDescriptor);
+    emit readFromSocket(Data,socketDescriptor);
 }
 
 void Worker::disconnected()

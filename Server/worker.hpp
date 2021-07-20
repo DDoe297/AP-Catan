@@ -8,12 +8,16 @@ class Worker : public QObject
 {
     Q_OBJECT
 public:
-    explicit Worker(qintptr ID, QObject *parent = nullptr);
+    explicit Worker(int PlayerID ,qintptr ID, QObject *parent = nullptr);
+private:
     QTcpSocket *socket;
     qintptr socketDescriptor;
+    int playerID;
 signals:
     void error(QTcpSocket::SocketError socketerror);
-    void readFromSocket(int,qintptr);
+    void readFromSocket(QByteArray,qintptr);
+    void sendPlayerName(QString);
+    void startGame();
 public slots:
     void start(void);
     void writeToSocket(QByteArray data);

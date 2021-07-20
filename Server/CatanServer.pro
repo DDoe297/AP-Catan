@@ -25,7 +25,8 @@ SOURCES += \
         trade.cpp \
         tradeanswer.cpp \
         server.cpp \
-        worker.cpp 
+        worker.cpp \
+        manager.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -57,4 +58,5 @@ HEADERS += \
     trade.hpp \
     tradeanswer.hpp \
     server.hpp \
-    worker.hpp 
+    worker.hpp \
+    manager.hpp

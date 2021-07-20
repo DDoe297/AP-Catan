@@ -1,39 +1,33 @@
-#include "manager.h"
-#include "game.hpp"
+#include "manager.hpp"
 
-Manager::Manager()
-{
+//void Manager::prepareGame(){
 
-}
+//    //rang adad esm
 
-void Manager::preparingGame(){
+//    //build resource 2bar
+//    for(int i=0;i<2;i++){
+//        for(int j=0;j<4;j++){
+//            _game.addSettlement(_game.getPlayer(j), _game.getBoard()->getPoint(2, 4),true);
+//            _game.addRoad(_game.getPlayer(j), _game.getBoard()->getPoint(3, 2),_game.getBoard()->getPoint(3, 1), true);
+//        }
+//    }
+//    startGame();
+//}
 
-    //rang adad esm
+//void Manager::startGame(){
 
-    //build resource 2bar
-    for(int i=0;i<2;i++){
-        for(int j=0;j<4;j++){
-            _game.addSettlement(_game.getPlayer(j), _game.getBoard()->getPoint(2, 4),true);
-            _game.addRoad(_game.getPlayer(j), _game.getBoard()->getPoint(3, 2),_game.getBoard()->getPoint(3, 1), true);
-        }
-    }
-    startGame();
-}
-
-void Manager::startGame(){
-
-    while(!_game.getHasEnded()){
-        playerTurn();
-        _game.checkForLongestRoad();
-        _game.checkForLargestArmy();
-        _game.checkForWinner();
-    }
-    //send winner
-}
+//    while(!_game.getHasEnded()){
+//        playerTurn();
+//        _game.checkForLongestRoad();
+//        _game.checkForLargestArmy();
+//        _game.checkForWinner();
+//    }
+//    //send winner
+//}
 
 void Manager::playerTurn(){
     //roll
-    int roll=_game.getRoll();
+    //int roll=_game.getRoll();
     //robber ya resource
     //if(roll==7)
       //  _game.activateRobber();
@@ -67,4 +61,32 @@ void Manager::playerTurn(){
         }
     }*/
     //player++
+}
+
+const QVector<QString> &Manager::getPlayerNames() const
+{
+    return playerNames;
+}
+
+void Manager::startServer()
+{
+    server->startServer();
+}
+
+void Manager::prepareGame()
+{
+    game=new Game(playerNames);
+    for(auto player:playerNames){
+        qDebug()<<player;
+    }
+}
+
+void Manager::addToPlayerNames(QString name)
+{
+    playerNames.append(name);
+}
+
+Manager::Manager(void)
+{
+    server = new Server(this);
 }

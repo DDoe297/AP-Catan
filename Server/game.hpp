@@ -12,15 +12,10 @@
 #include "board.hpp"
 #include "tile.hpp"
 
-struct initialPlayerData {
-  QString name;
-  Color color;
-};
-
 class Game : public QObject {
   Q_OBJECT
  public:
-  explicit Game(QVector<initialPlayerData> data, int numberOfPlayers = 4,
+  explicit Game(QVector<QString> names, int numberOfPlayers = 4,
                 int VictoryPointsToWin = 10, QObject *parent = nullptr);
   Board *getBoard() const;
   Player *getLargestArmyOwner() const;
@@ -41,7 +36,7 @@ class Game : public QObject {
   StatusCode tradeWithBank(Player *getter, ResourceCard getCard,
                            QVector<ResourceCard> giveCards);
   StatusCode activateRobber(Tile *tile, Player *player, Player *victim);
-  static int getRoll(void);
+  int getRoll(void);
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
@@ -56,8 +51,11 @@ class Game : public QObject {
   StatusCode removeCards(QVector<ResourceCard> cardsList);
   StatusCode addCards(QVector<ResourceCard> cardsList);
   const QVector<Player *> &getPlayers() const;
+  void endTurn();
+  int getLastRoll() const;
+  int getCurrentPlayerID() const;
 
- private:
+private:
   Board *board;
   Player *largestArmyOwner;
   Player *longestRoadOwner;
@@ -67,6 +65,8 @@ class Game : public QObject {
   QVector<DevelopmentCard> developmentCards;
   bool hasEnded;
   Player *winner;
+  int lastRoll;
+  int currentPlayerID;
 };
 
 #endif  // GAME_HPP

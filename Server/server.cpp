@@ -2,23 +2,26 @@
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-
+    if(players<=3){
     qDebug() << socketDescriptor << " Connecting...";
-    Worker *worker=new Worker(socketDescriptor);
+    Worker *worker=new Worker(players++,socketDescriptor);
     QThread *workerThread=new QThread;
     workerThreads.append(workerThread);
     worker->moveToThread(workerThread);
     connect(workerThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this,SIGNAL(write(QByteArray)),worker,SLOT(writeToSocket(QByteArray)));
-    connect(worker,SIGNAL(readFromSocket(int,qintptr)),this,SLOT(read(int,qintptr)));
+    connect(worker,SIGNAL(readFromSocket(QByteArray,qintptr)),this,SLOT(read(QByteArray,qintptr)));
+    connect(worker,SIGNAL(sendPlayerName(QString)),parent(),SLOT(addToPlayerNames(QString)));
+    connect(worker,SIGNAL(startGame()),parent(),SLOT(prepareGame()));
     connect(this, &Server::run, worker, &Worker::start);
     workerThread->start();
     emit run();
+    }
 }
 
-Server::Server(QObject *parent)
+Server::Server(QObject *parent) : QTcpServer(parent)
 {
-
+    players=0;
 }
 
 Server::~Server()
@@ -39,9 +42,7 @@ void Server::startServer()
     }
 }
 
-void Server::read(int data, qintptr descriptor)
+void Server::read(QByteArray data, qintptr descriptor)
 {
     qDebug() << descriptor << " Data in: " << data;
-    QString i=QString::number(descriptor)+" Said "+QString::number(data);
-    emit write(i.toUtf8());
 }
