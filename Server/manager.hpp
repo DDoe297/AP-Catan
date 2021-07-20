@@ -1,6 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 #include <QObject>
+#include <QJsonDocument>
 #include "game.hpp"
 #include "server.hpp"
 

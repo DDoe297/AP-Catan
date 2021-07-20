@@ -18,6 +18,8 @@ Game::Game(QVector<QString> names, int numberOfPlayers,
   winner = nullptr;
   currentPlayerID=0;
   lastRoll=0;
+  turnNumber=0;
+  startPhase = true;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -365,6 +367,8 @@ QJsonObject Game::toJSON() {
   gameJson["cards"] = boardCards;
   gameJson["last roll"]=getLastRoll();
   gameJson["current player"]=getCurrentPlayerID();
+  gameJson["turn number"]=turnNumber;
+  gameJson["start phase"]=startPhase;
   return gameJson;
 }
 
@@ -401,6 +405,7 @@ const QVector<Player *> &Game::getPlayers() const { return players; }
 void Game::endTurn()
 {
     currentPlayerID = (currentPlayerID+1)%players.length();
+    turnNumber++;
 }
 
 int Game::getLastRoll() const
@@ -411,4 +416,19 @@ int Game::getLastRoll() const
 int Game::getCurrentPlayerID() const
 {
     return currentPlayerID;
+}
+
+int Game::getTurnNumber() const
+{
+    return turnNumber;
+}
+
+bool Game::getStartPhase() const
+{
+    return startPhase;
+}
+
+void Game::setStartPhase(bool newStartPhase)
+{
+    startPhase = newStartPhase;
 }

@@ -19,6 +19,11 @@ void Server::incomingConnection(qintptr socketDescriptor)
     }
 }
 
+const QQueue<QJsonObject> &Server::getCommandQueue() const
+{
+    return commandQueue;
+}
+
 Server::Server(QObject *parent) : QTcpServer(parent)
 {
     players=0;
@@ -44,5 +49,6 @@ void Server::startServer()
 
 void Server::read(QByteArray data, qintptr descriptor)
 {
-    qDebug() << descriptor << " Data in: " << data;
+    QJsonObject json=QJsonDocument::fromJson(data).object();
+    commandQueue.enqueue(json);
 }

@@ -54,6 +54,9 @@ class Game : public QObject {
   void endTurn();
   int getLastRoll() const;
   int getCurrentPlayerID() const;
+  int getTurnNumber() const;
+  bool getStartPhase() const;
+  void setStartPhase(bool newStartPhase);
 
 private:
   Board *board;
@@ -67,6 +70,8 @@ private:
   Player *winner;
   int lastRoll;
   int currentPlayerID;
+  int turnNumber;
+  bool startPhase;
 };
 
 #endif  // GAME_HPP
