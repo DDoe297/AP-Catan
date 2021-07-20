@@ -11,6 +11,7 @@ void Server::incomingConnection(qintptr socketDescriptor)
     connect(workerThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this,SIGNAL(write(QByteArray)),worker,SLOT(writeToSocket(QByteArray)));
     connect(worker,SIGNAL(readFromSocket(QByteArray,qintptr)),this,SLOT(read(QByteArray,qintptr)));
+    connect(worker,SIGNAL(readFromSocket(QByteArray,qintptr)),parent(),SLOT(gameTurn()));
     connect(worker,SIGNAL(sendPlayerName(QString)),parent(),SLOT(addToPlayerNames(QString)));
     connect(worker,SIGNAL(startGame()),parent(),SLOT(prepareGame()));
     connect(this, &Server::run, worker, &Worker::start);

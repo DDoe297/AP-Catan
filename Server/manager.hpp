@@ -10,8 +10,7 @@ class Manager : public QObject
     Q_OBJECT
 public:
     Manager(void);
-    void startGame();
-    void playerTurn();
+    void playerChoice();
     const QVector<QString> &getPlayerNames() const;
     void startServer(void);
 private:
@@ -19,6 +18,7 @@ private:
     Server *server;
     QVector<QString> playerNames;
 public slots:
+    void gameTurn();
     void prepareGame();
     void addToPlayerNames(QString name);
 };
