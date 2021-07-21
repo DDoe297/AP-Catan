@@ -240,15 +240,12 @@ StatusCode Game::playRoadBuilding(Player *player,
   cardsToAdd.append(roadPrice);
   if (!player->hasDevelopmentCard(DevelopmentCard::RoadBuilding)) {
     return StatusCode::BadDeck;
-  } else if (!hasCards(cardsToAdd)) {
-    return StatusCode::BadDeck;
   }
   if (player->checkRoadLocation(firstRoad.first, firstRoad.second) ==
           StatusCode::OK &&
       player->checkRoadLocation(secondRoad.first, secondRoad.second) ==
           StatusCode::OK) {
     player->addCards(cardsToAdd);
-    removeCards(cardsToAdd);
     player->buildRoad(firstRoad.first, firstRoad.second);
     player->buildRoad(secondRoad.first, secondRoad.second);
   } else {
