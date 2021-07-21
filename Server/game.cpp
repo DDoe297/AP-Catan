@@ -282,6 +282,7 @@ QJsonObject Game::toJSON() {
     for (auto card : player->getDevCards()) {
       playerDevCards.append((int)card);
     }
+    p["DevCards"] = playerDevCards;
     QJsonArray playerNewDevCards;
     for (auto card : player->getNewDevCards()) {
       playerNewDevCards.append((int)card);
