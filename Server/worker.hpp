@@ -15,7 +15,7 @@ private:
     int playerID;
 signals:
     void error(QTcpSocket::SocketError socketerror);
-    void readFromSocket(const QByteArray,const qintptr);
+    void readFromSocket(const QByteArray);
     void sendPlayerName(QString);
     void startGame();
 public slots:
