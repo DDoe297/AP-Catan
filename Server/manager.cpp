@@ -39,7 +39,7 @@ void Manager::playerChoice() {
         game->endTurn();
       }
       if (!game->getStartPhase()) {
-        if (command == "roll") {
+        if (command == "roll" && !game->getHasRolled()) {
           QPair<int, int> roll = game->getRoll();
           game->getBoard()->addResource(roll.first + roll.second);
         } else if ((command == "activate robber" &&
@@ -80,25 +80,25 @@ void Manager::playerChoice() {
             resources.append((ResourceCard)resource.toInt());
           }
           game->tradeWithBank(player, (ResourceCard)getCard, resources);
-        } else if (command == "knight") {
+        } else if (command == "knight" && !game->getHasUsedDevCard()) {
           QJsonArray coordinates = clientMessage["coordinates"].toArray();
           int victimId = clientMessage["victim"].toInt();
           game->playKnight(game->getPlayer(game->getCurrentPlayerID()),
                            game->getBoard()->getTile(coordinates[0].toInt(),
                                                      coordinates[1].toInt()),
                            game->getPlayer(victimId));
-        } else if (command == "monopoly") {
+        } else if (command == "monopoly" && !game->getHasUsedDevCard()) {
           ResourceCard card = (ResourceCard)clientMessage["card"].toInt();
           Player *player = game->getPlayer(game->getCurrentPlayerID());
           game->playMonoploly(player, card);
-        } else if (command == "year of plenty") {
+        } else if (command == "year of plenty" && !game->getHasUsedDevCard()) {
           ResourceCard cardOne =
               (ResourceCard)clientMessage["card one"].toInt();
           ResourceCard cardTwo =
               (ResourceCard)clientMessage["card two"].toInt();
           Player *player = game->getPlayer(game->getCurrentPlayerID());
           game->playeYearOfPlenty(player, cardOne, cardTwo);
-        } else if (command == "road building") {
+        } else if (command == "road building" && !game->getHasUsedDevCard()) {
           Player *player = game->getPlayer(game->getCurrentPlayerID());
           QJsonArray coordinates = clientMessage["coordinates"].toArray();
           QJsonArray cOne = coordinates[0].toArray();

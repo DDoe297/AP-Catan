@@ -144,8 +144,7 @@ StatusCode Player::addCards(QVector<ResourceCard> cardsList) {
 }
 
 StatusCode Player::buyDevelopmentCard(void) {
-  QVector<DevelopmentCard> gameDevCards = game->getDevelopmentCards();
-  if (gameDevCards.length() == 0) {
+  if (game->getDevelopmentCards().isEmpty()) {
     return StatusCode::BadDeck;
   }
   if (!hasCards(devCardPrice)) {
@@ -153,8 +152,8 @@ StatusCode Player::buyDevelopmentCard(void) {
   }
   removeCards(devCardPrice);
   game->addCards(devCardPrice);
-  newDevCards.append(gameDevCards.last());
-  gameDevCards.removeLast();
+  newDevCards.append(game->getDevelopmentCards().last());
+  game->getDevelopmentCards().removeLast();
   return StatusCode::OK;
 }
 

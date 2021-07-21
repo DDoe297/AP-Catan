@@ -66,8 +66,10 @@ class Game : public QObject {
   Trade *getTradeHolder() const;
   void setTradeHolder(Trade *newTradeHolder);
   void acceptTrade(int index);
+  bool getHasRolled() const;
+  bool getHasUsedDevCard() const;
 
- private:
+private:
   Board *board;
   Player *largestArmyOwner;
   Player *longestRoadOwner;
@@ -83,6 +85,7 @@ class Game : public QObject {
   bool startPhase;
   Trade *tradeHolder;
   bool hasRolled;
+  bool hasUsedDevCard;
 };
 
 #endif  // GAME_HPP

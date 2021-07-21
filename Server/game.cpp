@@ -22,6 +22,7 @@ Game::Game(QVector<QString> names, int numberOfPlayers, int VictoryPointsToWin,
   startPhase = true;
   tradeHolder = nullptr;
   hasRolled = false;
+  hasUsedDevCard=false;
 }
 
 Game::~Game() {
@@ -206,6 +207,7 @@ StatusCode Game::playMonoploly(Player *player, ResourceCard card) {
     }
   }
   player->removeDevelopmentCard(DevelopmentCard::Monopoly);
+  hasUsedDevCard=true;
   return StatusCode::OK;
 }
 
@@ -219,6 +221,7 @@ StatusCode Game::playeYearOfPlenty(Player *player, ResourceCard cardOne,
   player->addCards({cardOne, cardTwo});
   removeCards({cardOne, cardTwo});
   player->removeDevelopmentCard(DevelopmentCard::YearOfPlenty);
+  hasUsedDevCard=true;
   return StatusCode::OK;
 }
 
@@ -229,6 +232,7 @@ StatusCode Game::playKnight(Player *player, Tile *tile, Player *victim) {
   activateRobber(tile, player, victim);
   player->increaseKnights();
   player->removeDevelopmentCard(DevelopmentCard::Knight);
+  hasUsedDevCard=true;
   return StatusCode::OK;
 }
 
@@ -252,6 +256,7 @@ StatusCode Game::playRoadBuilding(Player *player,
     return StatusCode::WrongPoint;
   }
   player->removeDevelopmentCard(DevelopmentCard::RoadBuilding);
+  hasUsedDevCard=true;
   return StatusCode::OK;
 }
 
@@ -408,6 +413,7 @@ QJsonObject Game::toJSON() {
     gameJson["trade"] = trade;
   }
   gameJson["has rolled"] = hasRolled;
+  gameJson["has used devCard"]=hasUsedDevCard;
   return gameJson;
 }
 
@@ -452,6 +458,7 @@ void Game::endTurn() {
     player->finishTurn();
   }
   hasRolled = false;
+  hasUsedDevCard=false;
 }
 
 QPair<int, int> Game::getLastRoll() const { return lastRoll; }
@@ -474,4 +481,14 @@ void Game::acceptTrade(int index) {
   tradeHolder->acceptAnswer(index);
   delete tradeHolder;
   tradeHolder = nullptr;
+}
+
+bool Game::getHasRolled() const
+{
+    return hasRolled;
+}
+
+bool Game::getHasUsedDevCard() const
+{
+    return hasUsedDevCard;
 }
