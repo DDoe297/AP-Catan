@@ -34,8 +34,8 @@ Server::~Server() {
     workerThread->wait();
     delete workerThread;
   }
-  for(auto worker:workers){
-      delete worker;
+  for (auto worker : workers) {
+    delete worker;
   }
 }
 

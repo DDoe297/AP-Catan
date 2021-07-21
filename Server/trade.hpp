@@ -17,6 +17,7 @@ class Trade : public QObject {
  public:
   explicit Trade(Game *Game, Player *Getter, QVector<ResourceCard> Cards,
                  QObject *parent = nullptr);
+  ~Trade();
   void addCards(QVector<ResourceCard> cardsList);
   void addAnswer(Player *giver, QVector<ResourceCard> giveCards);
   const QVector<ResourceCard> &getGetCards() const;

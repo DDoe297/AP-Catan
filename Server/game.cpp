@@ -24,12 +24,11 @@ Game::Game(QVector<QString> names, int numberOfPlayers, int VictoryPointsToWin,
   hasRolled = false;
 }
 
-Game::~Game()
-{
-    delete board;
-    for(auto player:players){
-        delete player;
-    }
+Game::~Game() {
+  delete board;
+  for (auto player : players) {
+    delete player;
+  }
 }
 
 Board *Game::getBoard() const { return board; }
@@ -446,7 +445,6 @@ StatusCode Game::addCards(QVector<ResourceCard> cardsList) {
 const QVector<Player *> &Game::getPlayers() const { return players; }
 
 void Game::newTrade(Player *player, QVector<ResourceCard> getCards) {
-
   tradeHolder = new Trade(this, player, getCards);
 }
 
@@ -472,12 +470,11 @@ void Game::setStartPhase(bool newStartPhase) { startPhase = newStartPhase; }
 Trade *Game::getTradeHolder() const { return tradeHolder; }
 
 void Game::setTradeHolder(Trade *newTradeHolder) {
-    tradeHolder = newTradeHolder;
+  tradeHolder = newTradeHolder;
 }
 
-void Game::acceptTrade(int index)
-{
-    tradeHolder->acceptAnswer(index);
-    delete tradeHolder;
-    tradeHolder=nullptr;
+void Game::acceptTrade(int index) {
+  tradeHolder->acceptAnswer(index);
+  delete tradeHolder;
+  tradeHolder = nullptr;
 }

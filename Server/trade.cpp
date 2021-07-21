@@ -8,6 +8,12 @@ Trade::Trade(Game *Game, Player *Getter, QVector<ResourceCard> Cards,
   getCards = Cards;
 }
 
+Trade::~Trade() {
+  for (auto answer : answers) {
+    delete answer;
+  }
+}
+
 void Trade::addCards(QVector<ResourceCard> cardsList) {
   for (auto card : cardsList) {
     getCards.append(card);
