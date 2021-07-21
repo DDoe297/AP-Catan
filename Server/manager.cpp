@@ -147,3 +147,9 @@ void Manager::prepareGame() {
 void Manager::addToPlayerNames(QString name) { playerNames.append(name); }
 
 Manager::Manager(void) { server = new Server(this); }
+
+Manager::~Manager()
+{
+    delete game;
+    delete server;
+}

@@ -10,6 +10,7 @@ class Manager : public QObject {
   Q_OBJECT
  public:
   Manager(void);
+  ~Manager(void);
   void playerChoice();
   const QVector<QString> &getPlayerNames() const;
   void startServer(void);
