@@ -4,6 +4,7 @@ void Server::incomingConnection(qintptr socketDescriptor) {
   if (players <= 3) {
     qDebug() << socketDescriptor << " Connecting...";
     Worker *worker = new Worker(players++, socketDescriptor);
+    workers.append(worker);
     QThread *workerThread = new QThread;
     workerThreads.append(workerThread);
     worker->moveToThread(workerThread);
@@ -32,6 +33,9 @@ Server::~Server() {
     workerThread->quit();
     workerThread->wait();
     delete workerThread;
+  }
+  for(auto worker:workers){
+      delete worker;
   }
 }
 

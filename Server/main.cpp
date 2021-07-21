@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
   QCoreApplication a(argc, argv);
-  Manager *manager = new Manager();
-  manager->startServer();
+  Manager manager;
+  manager.startServer();
   return a.exec();
 }

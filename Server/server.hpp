@@ -15,6 +15,7 @@ class Server : public QTcpServer {
  private:
   void incomingConnection(qintptr socketDescriptor);
   QVector<QThread *> workerThreads;
+  QVector<Worker *> workers;
   int players;
   QQueue<QJsonObject> commandQueue;
 

@@ -21,6 +21,7 @@ class Game : public QObject {
  public:
   explicit Game(QVector<QString> names, int numberOfPlayers = 4,
                 int VictoryPointsToWin = 10, QObject *parent = nullptr);
+  ~Game();
   Board *getBoard() const;
   Player *getLargestArmyOwner() const;
   Player *getLongestRoadOwner() const;
@@ -64,6 +65,7 @@ class Game : public QObject {
   void setStartPhase(bool newStartPhase);
   Trade *getTradeHolder() const;
   void setTradeHolder(Trade *newTradeHolder);
+  void acceptTrade(int index);
 
  private:
   Board *board;

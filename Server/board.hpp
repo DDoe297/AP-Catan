@@ -26,6 +26,7 @@ class Board : public QObject {
   Q_OBJECT
  public:
   explicit Board(Game *Game, QObject *parent = nullptr);
+  ~Board();
   QVector<Piece *> getPieces(void);
   StatusCode addPiece(Piece *piece, Point *Point);
   StatusCode addRoad(Piece *piece);

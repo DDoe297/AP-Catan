@@ -53,6 +53,29 @@ Board::Board(Game *Game, QObject *parent) : QObject(parent) {
   }
 }
 
+Board::~Board()
+{
+    for(const auto &row:tiles){
+        for(auto &tile:row){
+            delete tile;
+        }
+    }
+    for(auto harbor:harbors){
+        delete harbor;
+    }
+    for(const auto &row:points){
+        for(auto point:row){
+            if(point->getPiece()!=nullptr){
+                delete point->getPiece();
+            }
+            delete point;
+        }
+    }
+    for(auto road:roads){
+        delete road;
+    }
+}
+
 QVector<Piece *> Board::getPieces() {
   QVector<Piece *> pieces;
   for (const auto &row : points) {
