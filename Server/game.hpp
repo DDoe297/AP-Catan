@@ -8,9 +8,9 @@
 #include "Board_FWD.hpp"
 #include "Enums.hpp"
 #include "Game_FWD.hpp"
-#include "Trade_FWD.hpp"
-#include "TradeAnswer_FWD.hpp"
 #include "Player_FWD.hpp"
+#include "TradeAnswer_FWD.hpp"
+#include "Trade_FWD.hpp"
 #include "board.hpp"
 #include "tile.hpp"
 #include "trade.hpp"
@@ -40,7 +40,7 @@ class Game : public QObject {
   StatusCode tradeWithBank(Player *getter, ResourceCard getCard,
                            QVector<ResourceCard> giveCards);
   StatusCode activateRobber(Tile *tile, Player *player, Player *victim);
-  QPair<int,int> getRoll(void);
+  QPair<int, int> getRoll(void);
   Player *getPlayer(int i);
   void checkForLongestRoad();
   void checkForLargestArmy();
@@ -57,7 +57,7 @@ class Game : public QObject {
   const QVector<Player *> &getPlayers() const;
   void newTrade(Player *player, QVector<ResourceCard> getCards);
   void endTurn();
-   QPair<int,int> getLastRoll() const;
+  QPair<int, int> getLastRoll() const;
   int getCurrentPlayerID() const;
   int getTurnNumber() const;
   bool getStartPhase() const;
@@ -65,7 +65,7 @@ class Game : public QObject {
   Trade *getTradeHolder() const;
   void setTradeHolder(Trade *newTradeHolder);
 
-private:
+ private:
   Board *board;
   Player *largestArmyOwner;
   Player *longestRoadOwner;
@@ -75,11 +75,12 @@ private:
   QVector<DevelopmentCard> developmentCards;
   bool hasEnded;
   Player *winner;
-   QPair<int,int> lastRoll;
+  QPair<int, int> lastRoll;
   int currentPlayerID;
   int turnNumber;
   bool startPhase;
   Trade *tradeHolder;
+  bool hasRolled;
 };
 
 #endif  // GAME_HPP

@@ -57,6 +57,7 @@ class Player : public QObject {
   void increaseKnights(void);
   int getCities() const;
   int getSettlements() const;
+  const QVector<DevelopmentCard> &getNewDevCards() const;
 
  private:
   QString name;

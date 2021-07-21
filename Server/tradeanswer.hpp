@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QVector>
+
 #include "Enums.hpp"
 #include "TradeAnswer_FWD.hpp"
 #include "Trade_FWD.hpp"
-#include "trade.hpp"
 #include "player.hpp"
+#include "trade.hpp"
 
 class TradeAnswer : public QObject {
   Q_OBJECT

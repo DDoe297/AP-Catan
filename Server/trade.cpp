@@ -34,7 +34,4 @@ void Trade::acceptAnswer(int index) {
   game->setTradeHolder(nullptr);
 }
 
-Player *Trade::getGetter() const
-{
-    return getter;
-}
+Player *Trade::getGetter() const { return getter; }

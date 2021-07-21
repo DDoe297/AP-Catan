@@ -28,7 +28,7 @@ class Server : public QTcpServer {
   void write(QByteArray);
   void run(void);
  public slots:
-  void read(QByteArray data);
+  void read(const QByteArray data);
 };
 
 #endif  // SERVER_HPP

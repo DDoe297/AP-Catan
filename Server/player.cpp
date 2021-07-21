@@ -401,3 +401,7 @@ void Player::increaseKnights() { knights++; }
 int Player::getCities() const { return cities; }
 
 int Player::getSettlements() const { return settlements; }
+
+const QVector<DevelopmentCard> &Player::getNewDevCards() const {
+  return newDevCards;
+}

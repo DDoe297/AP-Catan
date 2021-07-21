@@ -1,7 +1,7 @@
 #include "game.hpp"
 
-Game::Game(QVector<QString> names, int numberOfPlayers,
-           int VictoryPointsToWin, QObject *parent)
+Game::Game(QVector<QString> names, int numberOfPlayers, int VictoryPointsToWin,
+           QObject *parent)
     : QObject(parent) {
   board = new Board(this);
   for (int i = 0; i < numberOfPlayers; i++) {
@@ -16,11 +16,12 @@ Game::Game(QVector<QString> names, int numberOfPlayers,
   longestRoadOwner = nullptr;
   largestArmyOwner = nullptr;
   winner = nullptr;
-  currentPlayerID=0;
-  lastRoll={0,0};
-  turnNumber=0;
+  currentPlayerID = 0;
+  lastRoll = {0, 0};
+  turnNumber = 0;
   startPhase = true;
-  tradeHolder=nullptr;
+  tradeHolder = nullptr;
+  hasRolled = false;
 }
 
 Board *Game::getBoard() const { return board; }
@@ -137,9 +138,10 @@ StatusCode Game::activateRobber(Tile *tile, Player *player, Player *victim) {
   return StatusCode::OK;
 }
 
-QPair<int,int> Game::getRoll() {
-    lastRoll={randomNumber(1, 6) , randomNumber(1, 6)};
-    return lastRoll;
+QPair<int, int> Game::getRoll() {
+  lastRoll = {randomNumber(1, 6), randomNumber(1, 6)};
+  hasRolled = true;
+  return lastRoll;
 }
 
 Player *Game::getPlayer(int i) {
@@ -271,7 +273,11 @@ QJsonObject Game::toJSON() {
     for (auto card : player->getDevCards()) {
       playerDevCards.append((int)card);
     }
-    p["devCards"] = playerDevCards;
+    QJsonArray playerNewDevCards;
+    for (auto card : player->getNewDevCards()) {
+      playerNewDevCards.append((int)card);
+    }
+    p["newDevCards"] = playerNewDevCards;
     playersArray.append(p);
   }
   gameJson["players"] = playersArray;
@@ -369,34 +375,35 @@ QJsonObject Game::toJSON() {
   QJsonArray roll;
   roll.append(lastRoll.first);
   roll.append(lastRoll.second);
-  gameJson["last roll"]=roll;
-  gameJson["current player"]=getCurrentPlayerID();
-  gameJson["turn number"]=turnNumber;
-  gameJson["start phase"]=startPhase;
-  if(tradeHolder!=nullptr){
-  QJsonObject trade;
-  trade["player id"]=tradeHolder->getGetter()->getNum();
-  QJsonArray tradeGet;
-  for(auto card:tradeHolder->getGetCards()){
+  gameJson["last roll"] = roll;
+  gameJson["current player"] = getCurrentPlayerID();
+  gameJson["turn number"] = turnNumber;
+  gameJson["start phase"] = startPhase;
+  if (tradeHolder != nullptr) {
+    QJsonObject trade;
+    trade["player id"] = tradeHolder->getGetter()->getNum();
+    QJsonArray tradeGet;
+    for (auto card : tradeHolder->getGetCards()) {
       tradeGet.append((int)card);
-  }
-  trade["get cards"]=tradeGet;
-  QJsonArray tradeAnswers;
-  int i=0;
-  for(auto answer:tradeHolder->getAnswers()){
+    }
+    trade["get cards"] = tradeGet;
+    QJsonArray tradeAnswers;
+    int i = 0;
+    for (auto answer : tradeHolder->getAnswers()) {
       QJsonObject tradeAnswer;
-      tradeAnswer["id"]=i++;
-      tradeAnswer["player id"]=answer->getGiver()->getNum();
+      tradeAnswer["id"] = i++;
+      tradeAnswer["player id"] = answer->getGiver()->getNum();
       QJsonArray tradeGive;
-      for(auto card:answer->getCards()){
-          tradeGive.append((int)card);
+      for (auto card : answer->getCards()) {
+        tradeGive.append((int)card);
       }
-      tradeAnswer["give cards"]=tradeGive;
+      tradeAnswer["give cards"] = tradeGive;
       tradeAnswers.append(tradeAnswer);
+    }
+    trade["answers"] = tradeAnswers;
+    gameJson["trade"] = trade;
   }
-  trade["answers"]=tradeAnswers;
-  gameJson["trade"]=trade;
-  }
+  gameJson["has rolled"] = hasRolled;
   return gameJson;
 }
 
@@ -430,48 +437,31 @@ StatusCode Game::addCards(QVector<ResourceCard> cardsList) {
 
 const QVector<Player *> &Game::getPlayers() const { return players; }
 
-void Game::newTrade(Player *player, QVector<ResourceCard> getCards)
-{
-    tradeHolder = new Trade(this, player,getCards);
+void Game::newTrade(Player *player, QVector<ResourceCard> getCards) {
+  tradeHolder = new Trade(this, player, getCards);
 }
 
-void Game::endTurn()
-{
-    currentPlayerID = (currentPlayerID+1)%players.length();
-    turnNumber++;
+void Game::endTurn() {
+  currentPlayerID = (currentPlayerID + 1) % players.length();
+  turnNumber++;
+  for (auto player : players) {
+    player->finishTurn();
+  }
+  hasRolled = false;
 }
 
-QPair<int,int> Game::getLastRoll() const
-{
-    return lastRoll;
-}
+QPair<int, int> Game::getLastRoll() const { return lastRoll; }
 
-int Game::getCurrentPlayerID() const
-{
-    return currentPlayerID;
-}
+int Game::getCurrentPlayerID() const { return currentPlayerID; }
 
-int Game::getTurnNumber() const
-{
-    return turnNumber;
-}
+int Game::getTurnNumber() const { return turnNumber; }
 
-bool Game::getStartPhase() const
-{
-    return startPhase;
-}
+bool Game::getStartPhase() const { return startPhase; }
 
-void Game::setStartPhase(bool newStartPhase)
-{
-    startPhase = newStartPhase;
-}
+void Game::setStartPhase(bool newStartPhase) { startPhase = newStartPhase; }
 
-Trade *Game::getTradeHolder() const
-{
-    return tradeHolder;
-}
+Trade *Game::getTradeHolder() const { return tradeHolder; }
 
-void Game::setTradeHolder(Trade *newTradeHolder)
-{
-    tradeHolder = newTradeHolder;
+void Game::setTradeHolder(Trade *newTradeHolder) {
+  tradeHolder = newTradeHolder;
 }
