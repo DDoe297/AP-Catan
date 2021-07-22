@@ -460,6 +460,8 @@ void Game::endTurn() {
   }
   hasRolled = false;
   hasUsedDevCard=false;
+  delete tradeHolder;
+  tradeHolder=nullptr;
 }
 
 QPair<int, int> Game::getLastRoll() const { return lastRoll; }

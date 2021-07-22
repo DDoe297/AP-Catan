@@ -158,10 +158,11 @@ StatusCode Player::buyDevelopmentCard(void) {
 }
 
 StatusCode Player::removeDevelopmentCard(DevelopmentCard card) {
-  if (hasDevelopmentCard(card)) {
-    devCards.removeOne(card);
+  if (!hasDevelopmentCard(card)) {
+    return StatusCode::BadCards;
   }
-  return StatusCode::BadCards;
+  devCards.removeOne(card);
+  return StatusCode::OK;
 }
 
 bool Player::hasDevelopmentCard(DevelopmentCard card) {
